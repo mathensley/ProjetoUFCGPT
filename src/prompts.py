@@ -36,6 +36,11 @@ Suas tarefas:
 Sempre forneça a informação não processada como resposta.
 """
 
+EURECA_SYSTEM_PROMPT = """
+
+"""
+
+
 OUTPUT_SUMMARIZING_SYSTEM_PROMPT = """
 Você é um agente de resumo de saída responsável por sintetizar informações provenientes de outros agentes.
 
