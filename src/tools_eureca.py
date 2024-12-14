@@ -123,7 +123,18 @@ def get_disciplinas_curso(base_url, campus, curso, curriculo):
 @tool
 def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
     """
-    Plano de curso de uma disciplina.
+    Descrição: Plano de curso de uma disciplina.
+    
+    Returns: Retorna o plano de curso de uma disciplina. As informações retornadas são:
+    {
+        turma: Código da turma,
+        codigo_da_disciplina: Código da disciplina,
+        nome_da_disciplina: Nome da disciplina,
+        codigo_do_setor: Código do setor ao qual a curso pertence,
+        nome_do_setor: Nome do setor ao qual o curso pertence,
+        periodo: Perído em que a disciplina foi dada,
+        ementa: Descrição da ementa do curso. Ou seja, o que é ensinado nessa disciplina e suas metodologias de ensino.
+    }
     """
     params = {
         'disciplina': codigo_disciplina,
@@ -141,7 +152,18 @@ def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
 @tool
 def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
     """
-    Buscar plano de aulas de uma turma de uma disciplina com temas das aulas para cada dia de aula.
+    Descrição: Buscar plano de aulas de uma turma de uma disciplina com temas das aulas para cada dia de aula.
+    
+    Returns: Retorna uma lista de plano de aulas. Cada plano de aula tem essas informações: 
+    {
+        turma: Código da turma,
+        codigo_da_disciplina: Código da disciplina,
+        periodo: Período da disciplina,
+        aula_sequencia: Numero de aulas necessarios para o conteudo,
+        data: Data em que o conteudo será ensinado,
+        horas: Horas de aulas necessárias,
+        assunto: Descrição do plano da aula que será realizado.
+    },
     """
     params = {
         'disciplina': codigo_disciplina,
@@ -159,7 +181,14 @@ def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
 @tool
 def get_campi(base_url):
     """
-    Buscar todos os campi.
+    Descrição: Buscar todos os campi. 
+    
+    Returns: Retorna uma lista de objetos JSON com as informações retornadas são: 
+    {
+        campus: Código do campus, 
+        descricao: Nome do campus,
+        representacao: Número do campus em representação romana
+    }
     """
     response = requests.get(f'{base_url}/campi')
 
@@ -171,7 +200,20 @@ def get_campi(base_url):
 @tool
 def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, periodo_ate):
     """
-    Buscar matrículas dos alunos numa turma de uma disciplina.
+    Descrição: Buscar matrículas dos alunos numa turma de uma disciplina.
+    
+    Returns: Retorna uma lista de matriculas de estudantes em uma disciplina. Cada informação tem: 
+    {
+        matricula_do_estudante: Matrícula do estudante,
+        codigo_da_disciplina: Código da disciplina cursada,
+        nome_da_disciplina: Nome da disciplina,
+        periodo: Período em que está o estudante começou a cursar a disciplina,
+        turma: Número da turma,
+        status: Status da matrícula do estudante,
+        tipo: Tipo de disciplina,
+        media_final: Média final do aluno matriculado,
+        dispensas: Caso haja dispensa, ele informa como ele passou na disciplina com a dispensa.
+    }
     """
     params = {
         'curso': curso,
@@ -191,7 +233,20 @@ def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, period
 @tool
 def get_calendarios(base_url):
     """
-    Buscar calendários da universidade. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
+    Descrição: Buscar calendários da universidade. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
+    
+    Returns: Retorna uma lista de calendários (períodos) que a UFCG já teve desde 2004 até hoje. Cada calendário tem essas informações:
+    {
+        id: Código do calendário,
+        periodo: Período em que o calendário foi iniciado,
+        campus: Código do campus,
+        inicio_das_matriculas: Timestamp de inicio da matricula dos estudantes,
+        inicio_das_aulas: Timestamp do inicio das aulas,
+        um_terco_do_periodo: Um terço do período (data limite de trancamento de algum(as) disciplina(s)),
+        ultimo_dia_para_registro_de_notas: Ultimo dia de aula,
+        um_quarto_do_periodo: Timestamp de um quarto do período,
+        numero_de_semanas: Número de semanas de aula
+    }
     """
     response = requests.get(f'{base_url}/calendarios')
 
@@ -203,7 +258,7 @@ def get_calendarios(base_url):
 @tool
 def get_professores(base_url, setor):
     """
-    Buscar professores de um centro.
+    Descrição: Busca a quantidade de professores de um centro.
     """
     params = {
         "status": "ATIVO",
@@ -212,14 +267,34 @@ def get_professores(base_url, setor):
     response = requests.get(f'{base_url}/professores', params=params)
 
     if response.status_code == 200:
-        return json.loads(response.text)
+        return len(json.loads(response.text))
     else:
         return None
 
 @tool
 def get_estagios(base_url, inicio_de, fim_ate, unidade):
     """
-    Buscar estágios dos estudantes por unidade acadêmica.
+    Descrição: Buscar estágios dos estudantes por unidade acadêmica.
+    
+    Returns: Retorna as informações dos estágios dos estudantes de uma unidade. Cada obeto retornado tem: 
+    {
+        id: Id do estágio,
+        matricula_do_estudante: Matricula do estudante,
+        id_concedente: Id do concedente,
+        uf_concedente: Sigla da unidade federativa do estágio,
+        matricula_do_docente: matricula do docente orientador do es´tagio,
+        departamento: Nome do departamento,
+        nome_docente: Nome do docente,
+        obrigatorio: True ou False,
+        inicio_vigencia: Timestamp,
+        final_vigencia: Timestamp,
+        carga_semanal: Numero de horas trabalhadas semanalmente,
+        status: Status do estágio,
+        codigo_da_disciplina: código da disciplina de estágio,
+        agente_integracao: None,
+        bolsa_mensal: Valor da bolsa,
+        auxilio_transporte_diario: Valor do auxílio transporte
+    },
     """
     params = {
         "inicio-de": inicio_de,
