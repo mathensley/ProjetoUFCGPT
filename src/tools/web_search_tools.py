@@ -3,7 +3,7 @@ from langchain_core.tools import tool
 from bs4 import BeautifulSoup
 
 @tool
-def read_page(url):
+def read_page(url: str) -> str:
     """Read text content from a given webpage URL."""
     try:
         print(f"Agent visiting webpage: {url}")

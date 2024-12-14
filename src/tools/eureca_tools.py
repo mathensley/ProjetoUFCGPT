@@ -3,7 +3,7 @@ import json
 from langchain_core.tools import tool
 
 @tool
-def get_cursos(base_url):
+def get_cursos(base_url: str) -> list:
     """
     Buscar todos os cursos da UFCG
     """
@@ -13,10 +13,10 @@ def get_cursos(base_url):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_curriculos(base_url, curso):
+def get_curriculos(base_url: str, curso: str) -> list:
     """
     Buscar todos os currículos de um curso
     """    
@@ -25,10 +25,10 @@ def get_curriculos(base_url, curso):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_disciplinas_curso(base_url, campus, curso, curriculo):
+def get_disciplinas_curso(base_url: str, campus: str, curso: str, curriculo: str) -> list:
     """
     Buscar todas as disciplinas de um curso
     """
@@ -43,10 +43,11 @@ def get_disciplinas_curso(base_url, campus, curso, curriculo):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
+def get_plano_de_curso(base_url: str, codigo_disciplina: str, 
+                       periodo_de: str, periodo_ate: str) -> list:
     """
     Plano de curso de uma disciplina
     """
@@ -61,10 +62,11 @@ def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
+def get_plano_de_aulas(base_url: str, codigo_disciplina: str, 
+                       periodo_de: str, periodo_ate: str) -> list:
     """
     Buscar plano de aulas de uma turma de uma disciplina
     """
@@ -79,10 +81,10 @@ def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_campi(base_url):
+def get_campi(base_url: str) -> list:
     """
     Buscar todos os campi
     """
@@ -91,10 +93,11 @@ def get_campi(base_url):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, periodo_ate):
+def get_matriculas(base_url: str, curso: str, 
+                   codigo_disciplina: str, turma: str, periodo_de: str, periodo_ate: str) -> list:
     """
     Buscar matrículas dos alunos
     """
@@ -111,10 +114,10 @@ def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, period
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_calendarios(base_url):
+def get_calendarios(base_url: str) -> list:
     """
     Buscar calendários da universidade
     """
@@ -123,10 +126,10 @@ def get_calendarios(base_url):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_professores(base_url, setor):
+def get_professores(base_url: str, setor: str) -> list:
     """
     Buscar professores
     """
@@ -139,10 +142,10 @@ def get_professores(base_url, setor):
     if response.status_code == 200:
         return json.loads(response.text)
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_estagios(base_url, inicio_de, fim_ate, unidade):
+def get_estagios(base_url: str, inicio_de: str, fim_ate: str, unidade: str) -> list:
     """
     Buscar estágios
     """
@@ -162,6 +165,5 @@ def get_estagios(base_url, inicio_de, fim_ate, unidade):
             estagiario for estagiario in estagiarios
             if any(professor['matricula_do_docente'] == estagiario['matricula_do_docente'] for professor in professores)]
         return estagiarios_unidade
-
     else:
-        return None
+        return [{"erro": "Não foi possível obter informação da UFCG."}]

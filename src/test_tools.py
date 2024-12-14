@@ -1,5 +1,5 @@
-from tools import *
-from tools_eureca import *
+from tools.web_search_tools import *
+from tools.tools_eureca import *
 
 print(read_page("https://www.prac.ufcg.edu.br/ultimas-noticias"))
 

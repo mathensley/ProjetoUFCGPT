@@ -1,34 +1,24 @@
-import operator, functools
+import functools
 from dotenv import load_dotenv
-from typing import TypedDict, Annotated, Sequence, Literal
-from langgraph.graph import StateGraph, END, START
+
+from tools.web_search_tools import *
+from prompts.system_prompts import *
+from .agent_class import *
+
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import BaseMessage, AIMessage
+from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langgraph.prebuilt import create_react_agent
+from langgraph.graph import StateGraph, END, START
 from langgraph.checkpoint.memory import MemorySaver
-from pydantic import BaseModel
-from prompts import *
-from tools import *
 
 load_dotenv()
-
-AGENTS = ["Agente_Comunicados_Oficiais", "Agente_Sumarizador"]
-OPTIONS = ("FINALIZAR",) + tuple(AGENTS)
 
 NOTICES_TOOLS = [
     read_page
 ]
 
 model = ChatOpenAI(model="gpt-3.5-turbo")
-
-class RouteResponse(BaseModel):
-    next: Literal[OPTIONS]
-
-class AgentState(TypedDict):
-    messages: Annotated[Sequence[BaseMessage], operator.add]
-    next: str
-
 
 async def agent_node(state, agent, name):
     try:
@@ -66,7 +56,6 @@ def output_summarizing_node(state):
 
 official_notices_agent = create_react_agent(model, tools=NOTICES_TOOLS, state_modifier=OFFICIAL_NOTICES_SYSTEM_PROMPT)
 official_notices_node = functools.partial(agent_node, agent=official_notices_agent, name="Agente_Comunicados_Oficiais")
-
 
 
 def build_flow() -> StateGraph:
