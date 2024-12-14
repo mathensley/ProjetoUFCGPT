@@ -5,10 +5,9 @@ from langchain_core.tools import tool
 @tool
 def get_cursos(base_url):
     """
-    Buscar todos os cursos ativos da UFCG.
-    Retorna uma lista de objetos JSON de curso.
+    Descrição: Buscar todos os cursos ativos da UFCG.
     
-    Cada curso possui essas informações:
+    Returns: Retorna uma lista de objetos JSON de curso. Cada um dos cursos retornados possuem essas informações:
     {
         codigo_do_curso: codigo do curso,
         descricao: nome do curso,
@@ -39,9 +38,9 @@ def get_cursos(base_url):
 @tool
 def get_curriculos(base_url, curso):
     """
-    Buscar todos os currículos de um curso, ou seja, a grade curricular do curso. 
+    Descrição: Buscar todos os currículos de um curso, ou seja, a grade curricular do curso. 
     
-    O curriculo tem essas informações:
+    Returns: O curriculo tem essas informações. O curriculo retornado possui essas informações:
     {
         codigo_do_curso: Código do curso,
         codigo_do_curriculo: Ano em que o curriculo do curso mudou pela última vez (ou seja, inseriu ou removeu novas disciplinas da grade),
@@ -82,7 +81,31 @@ def get_curriculos(base_url, curso):
 @tool
 def get_disciplinas_curso(base_url, campus, curso, curriculo):
     """
-    Buscar todas as disciplinas de um curso.
+    Descrição: Buscar todas as disciplinas de um curso.
+    
+    Returns: Retorna uma lista de disciplinas do curso. Cada uma das disciplinas possuem essas informações::
+    {
+        codigo_da_disciplina: Códido da disciplina,
+        nome: Nome do curso,
+        carga_horaria_teorica_semanal: Quantas horas teoricas tem uma disciplina no total,
+        carga_horaria_pratica_semanal: Quantas horas praticas tem uma disciplina no total,
+        quantidade_de_creditos: Quantos creéditos tem a disciplina,
+        horas_totais: Quantas horas teoricas tem uma disciplina no total,
+        media_de_aprovacao: Quantos alunos em média são aprovados nessa disciplina,
+        carga_horaria_teorica_minima: Quantas horas teoricas mínimas pode ter a disciplina,
+        carga_horaria_pratica_minima: Quantas horas praticas mínimas pode ter a disciplina,
+        carga_horaria_teorica_maxima: Quantas horas teoricas máximas pode ter a disciplina,
+        carga_horaria_pratica_maxima: Quantas horas práticas máximas pode ter a disciplina,
+        numero_de_semanas: Quantas semanas tem essa disciplina (se por exemplo, for 10 então são 10 semanas de aula),
+        codigo_do_setor: Código do setor a qual a disciplina pertence,
+        nome_do_setor: Nome do setor a qual a disciplina pertencne,
+        campus: Código do campus ao qual a disciplina pertence,
+        nome_do_campus: Nome do campus ao qual a disciplina pertence,
+        status: Status do curso, por exemplo ATIVO ou INATIVO,
+        contabiliza_creditos: Informação sobre se contabiliza créditos com sim ou não,
+        tipo_de_componente_curricular: Tipo de componente curricular,
+        carga_horaria_extensao: Quantas horas de extensão a disciplina tem.
+    }
     """
     params = {
         'campus': campus,
