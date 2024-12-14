@@ -282,7 +282,7 @@ def get_estagios(base_url, inicio_de, fim_ate, unidade):
         matricula_do_estudante: Matricula do estudante,
         id_concedente: Id do concedente,
         uf_concedente: Sigla da unidade federativa do estágio,
-        matricula_do_docente: matricula do docente orientador do es´tagio,
+        matricula_do_docente: matricula do docente orientador do estagio,
         departamento: Nome do departamento,
         nome_docente: Nome do docente,
         obrigatorio: True ou False,
