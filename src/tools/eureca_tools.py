@@ -3,24 +3,52 @@ import json
 from langchain_core.tools import tool
 
 @tool
-def get_cursos(base_url: str) -> list:
+def get_cursos_ativos(base_url: str) -> list:
     """
-    Buscar todos os cursos da UFCG
+    Buscar todos os cursos ativos da UFCG.
+    
+    Retorna uma lista de objetos JSON de curso. Cada um dos cursos retornados possuem essas informações:
+    {
+        codigo_do_curso: codigo do curso,
+        descricao: nome do curso
+    }
     """
-    url_cursos = f'{base_url}/cursos?status-enum=ATIVOS'
-    response = requests.get(url_cursos)
+    url_cursos = f'{base_url}/cursos'
+    params = {
+        'status-enum':'ATIVOS',
+        'campus': '1'
+    }
+    response = requests.get(url_cursos, params=params)
 
     if response.status_code == 200:
-        return json.loads(response.text)
+        data_json = json.loads(response.text)
+        return [{'codigo_do_curso': data['codigo_do_curso'], 'descricao': data['descricao']} for data in data_json]
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_curriculos(base_url: str, curso: str) -> list:
+def get_curso(base_url: str, codigo_curso: str) -> list:
     """
-    Buscar todos os currículos de um curso
-    """    
-    response = requests.get(f'{base_url}/curriculos?curso={curso}')
+    Descrição: Buscar informação de um curso da UFCG a partir do código do curso.
+    """
+    params = {
+        'status-enum': 'ATIVOS',
+        'curso': codigo_curso
+    }
+    url_cursos = f'{base_url}/cursos'
+    response = requests.get(url_cursos, params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+        return None
+
+@tool
+def get_curriculos(base_url: str, codigo_curso: str) -> list:
+    """
+    Buscar todos os currículos de um curso, ou seja, a grade curricular do curso. 
+    """
+    response = requests.get(f'{base_url}/curriculos?curso={codigo_curso}')
     
     if response.status_code == 200:
         return json.loads(response.text)
@@ -28,20 +56,26 @@ def get_curriculos(base_url: str, curso: str) -> list:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_disciplinas_curso(base_url: str, campus: str, curso: str, curriculo: str) -> list:
+def get_disciplinas_curso(base_url: str, codigo_curso: str, codigo_curriculo: str) -> list:
     """
-    Buscar todas as disciplinas de um curso
+    Buscar todas as disciplinas de um curso.
+
+    Retorna uma lista de disciplinas do curso. Cada uma das disciplinas possuem essas informações::
+    {
+        codigo_da_disciplina: Códido da disciplina,
+        nome: Nome do curso
+    }
     """
     params = {
-        'campus': campus,
-        'curso': curso,
-        'curriculo': curriculo
+        'curso': codigo_curso,
+        'curriculo': codigo_curriculo
     }
 
     response = requests.get(f'{base_url}/disciplinas', params=params)
 
     if response.status_code == 200:
-        return json.loads(response.text)
+        res = json.loads(response.text)
+        return [{'codigo_da_disciplina': data['codigo_da_disciplina'], 'nome': data['nome']} for data in res]
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
@@ -117,11 +151,21 @@ def get_matriculas(base_url: str, curso: str,
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_calendarios(base_url: str) -> list:
+def get_calendarios(base_url: str, campus: str) -> list:
     """
-    Buscar calendários da universidade
+    Descrição: Buscar calendários da universidade. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
+
+    Returns:
+    {
+        campus: Código do campus, 
+        descricao: Nome do campus,
+        representacao: Número do campus em representação romana
+    }
     """
-    response = requests.get(f'{base_url}/calendarios')
+    params = {
+        'campus': campus
+    }
+    response = requests.get(f'{base_url}/calendarios', params=params)
 
     if response.status_code == 200:
         return json.loads(response.text)
@@ -129,9 +173,9 @@ def get_calendarios(base_url: str) -> list:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_professores(base_url: str, setor: str) -> list:
+def get_professores(base_url: str, setor: str) -> int:
     """
-    Buscar professores
+    Descrição: Busca a quantidade de professores de um centro.
     """
     params = {
         "status": "ATIVO",
@@ -140,7 +184,7 @@ def get_professores(base_url: str, setor: str) -> list:
     response = requests.get(f'{base_url}/professores', params=params)
 
     if response.status_code == 200:
-        return json.loads(response.text)
+        return len(json.loads(response.text))
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 

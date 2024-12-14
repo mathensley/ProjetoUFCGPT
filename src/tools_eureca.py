@@ -2,8 +2,7 @@ import requests
 import json
 from langchain_core.tools import tool
 
-@tool
-def get_cursos_ativos(base_url):
+def get_cursos_ativos(base_url: str) -> list:
     """
     Descrição: Buscar todos os cursos ativos da UFCG.
     
@@ -16,7 +15,7 @@ def get_cursos_ativos(base_url):
     url_cursos = f'{base_url}/cursos'
     params = {
         'status-enum':'ATIVOS',
-        'campus':'1'
+        'campus': '1'
     }
     response = requests.get(url_cursos, params=params)
 
@@ -27,8 +26,7 @@ def get_cursos_ativos(base_url):
         return None
 
 
-@tool
-def get_curso(base_url, curso):
+def get_curso(base_url: str, course: str):
     """
     Descrição: Buscar informação de um curso da UFCG a partir do código do curso.
     
@@ -55,7 +53,7 @@ def get_curso(base_url, curso):
     
     params = {
         'status-enum': 'ATIVOS',
-        'curso': curso
+        'curso': course
     }
     url_cursos = f'{base_url}/cursos'
     response = requests.get(url_cursos, params=params)
@@ -65,8 +63,7 @@ def get_curso(base_url, curso):
     else:
         return None
 
-@tool
-def get_curriculos(base_url, curso):
+def get_curriculos(base_url: str, curso: str) -> list:
     """
     Descrição: Buscar todos os currículos de um curso, ou seja, a grade curricular do curso. 
     
@@ -108,7 +105,6 @@ def get_curriculos(base_url, curso):
     else:
         return None
 
-@tool
 def get_disciplinas_curso(base_url, campus, curso, curriculo):
     """
     Descrição: Buscar todas as disciplinas de um curso.
@@ -142,15 +138,14 @@ def get_disciplinas_curso(base_url, campus, curso, curriculo):
         'curso': curso,
         'curriculo': curriculo
     }
-
     response = requests.get(f'{base_url}/disciplinas', params=params)
 
     if response.status_code == 200:
-        return json.loads(response.text)
+        res = json.loads(response.text)
+        return [{'codigo_da_disciplina': data['codigo_da_disciplina'], 'nome': data['nome']} for data in res]
     else:
         return None
 
-@tool
 def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
     """
     Descrição: Plano de curso de uma disciplina.
@@ -179,7 +174,6 @@ def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
     else:
         return None
 
-@tool
 def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
     """
     Descrição: Buscar plano de aulas de uma turma de uma disciplina com temas das aulas para cada dia de aula.
@@ -208,7 +202,6 @@ def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
     else:
         return None
 
-@tool
 def get_campi(base_url):
     """
     Descrição: Buscar todos os campi. 
@@ -227,7 +220,6 @@ def get_campi(base_url):
     else:
         return None
 
-@tool
 def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, periodo_ate):
     """
     Descrição: Buscar matrículas dos alunos numa turma de uma disciplina.
@@ -260,8 +252,7 @@ def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, period
     else:
         return None
 
-@tool
-def get_calendarios(base_url):
+def get_calendarios(base_url, campus):
     """
     Descrição: Buscar calendários da universidade. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
     
@@ -278,14 +269,16 @@ def get_calendarios(base_url):
         numero_de_semanas: Número de semanas de aula
     }
     """
-    response = requests.get(f'{base_url}/calendarios')
+    params = {
+        'campus': campus
+    }
+    response = requests.get(f'{base_url}/calendarios', params=params)
 
     if response.status_code == 200:
         return json.loads(response.text)
     else:
         return None
 
-@tool
 def get_professores(base_url, setor):
     """
     Descrição: Busca a quantidade de professores de um centro.
@@ -301,7 +294,6 @@ def get_professores(base_url, setor):
     else:
         return None
 
-@tool
 def get_estagios(base_url, inicio_de, fim_ate, unidade):
     """
     Descrição: Buscar estágios dos estudantes por unidade acadêmica.
@@ -324,7 +316,7 @@ def get_estagios(base_url, inicio_de, fim_ate, unidade):
         agente_integracao: None,
         bolsa_mensal: Valor da bolsa,
         auxilio_transporte_diario: Valor do auxílio transporte
-    },
+    }
     """
     params = {
         "inicio-de": inicio_de,
