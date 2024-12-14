@@ -3,11 +3,36 @@ import json
 from langchain_core.tools import tool
 
 @tool
-def get_cursos(base_url):
+def get_cursos_ativos(base_url):
     """
     Descrição: Buscar todos os cursos ativos da UFCG.
     
     Returns: Retorna uma lista de objetos JSON de curso. Cada um dos cursos retornados possuem essas informações:
+    {
+        codigo_do_curso: codigo do curso,
+        descricao: nome do curso
+    }
+    """
+    url_cursos = f'{base_url}/cursos'
+    params = {
+        'status-enum':'ATIVOS',
+        'campus':'1'
+    }
+    response = requests.get(url_cursos, params=params)
+
+    if response.status_code == 200:
+        data_json = json.loads(response.text)
+        return [{'codigo_do_curso': data['codigo_do_curso'], 'descricao': data['descricao']} for data in data_json]
+    else:
+        return None
+
+
+@tool
+def get_curso(base_url, curso):
+    """
+    Descrição: Buscar informação de um curso da UFCG a partir do código do curso.
+    
+    Returns: Retorna um objeto JSON de curso. As informações retornadas são:
     {
         codigo_do_curso: codigo do curso,
         descricao: nome do curso,
@@ -27,8 +52,13 @@ def get_cursos(base_url):
         ciclo_enade: Valor numérico de quantos em quantos peridos o curso realiza o ENADE.
     }
     """
-    url_cursos = f'{base_url}/cursos?status-enum=ATIVOS'
-    response = requests.get(url_cursos)
+    
+    params = {
+        'status-enum': 'ATIVOS',
+        'curso': curso
+    }
+    url_cursos = f'{base_url}/cursos'
+    response = requests.get(url_cursos, params=params)
 
     if response.status_code == 200:
         return json.loads(response.text)
