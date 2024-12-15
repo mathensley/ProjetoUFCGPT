@@ -7,4 +7,4 @@ course = "14102100"
 #print(get_cursos(base_url))
 #print(get_campi(base_url))
 
-print(get_curriculos(base_url, course))
+print(get_cursos_ativos(base_url))
