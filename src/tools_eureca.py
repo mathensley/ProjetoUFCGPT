@@ -1,6 +1,6 @@
 import requests
 import json
-from langchain_core.tools import tool
+import numpy as np
 
 def get_cursos_ativos(base_url: str) -> list:
     """
@@ -314,11 +314,98 @@ def get_professores(base_url, setor):
         return None
 
 
-def get_estagios(base_url, inicio_de, fim_ate, unidade):
+
+
+
+
+
+
+
+# Sem tools
+def get_total_professores(base_url, setor):
     """
-    Descrição: Buscar estágios dos estudantes por unidade acadêmica.
+    Descrição: Busca a quantidade de professores de um centro.
     
-    Returns: Retorna as informações dos estágios dos estudantes de uma unidade. Cada obeto retornado tem: 
+    Returns: Retorna a quantidade de professores do centro.
+    """
+    params = {
+        "status": "ATIVO",
+        "setor": setor
+    }
+    response = requests.get(f'{base_url}/professores', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+        return None
+
+
+# Com tools
+def get_setores(base_url, campus):
+    params = {
+        "campus": campus
+    }
+    response = requests.get(f'{base_url}/setores', params=params)
+
+    if response.status_code == 200:
+      return json.loads(response.text)
+    else:
+      return None
+
+
+# Sem tools
+def get_professores(base_url, setor):
+    """
+    Descrição: Busca a quantidade de professores de um centro.
+    
+    Returns: Retorna a quantidade de professores do centro.
+    """
+    params = {
+        "status": "ATIVO",
+        "setor": setor
+    }
+    response = requests.get(f'{base_url}/professores', params=params)
+
+    if response.status_code == 200:
+        return len(json.loads(response.text))
+    else:
+        return None
+
+
+# Sem tools
+def extrair_insights_estagios(estagiarios, uf):
+    estagiarios_uf = ([
+        est for est in estagiarios
+        if (est['uf_concedente'] == uf)
+    ])
+  
+    bolsas = [
+        float(estagiario['bolsa_mensal']) if estagiario['bolsa_mensal'] is not None else 0 
+        for estagiario in estagiarios_uf
+    ]
+    auxilio_transporte = [
+        float(estagiario['auxilio_transporte_diario']) if estagiario['auxilio_transporte_diario'] is not None else 0 
+        for estagiario in estagiarios_uf
+    ]
+
+
+    return {
+        "total_estagiarios": len(estagiarios_uf),
+        "bolsa_mensal_minima": float(f'{min(bolsas):.2f}'),
+        "bolsa_mensal_maxima": float(f'{max(bolsas):.2f}'),
+        "bolsa_mensal_media": float(f'{np.mean(bolsas):.2f}'),
+        "auxilio_transporte_diario_minimo": float(f'{min(auxilio_transporte):.2f}'),
+        "auxilio_transporte_diario_maximo": float(f'{max(auxilio_transporte):.2f}'),
+        "auxilio_transporte_diario_medio": float(f'{np.mean(auxilio_transporte):.2f}')
+    }
+
+
+# Com tools
+def get_estagios(base_url, inicio_de, fim_ate, setor):
+    """
+    Descrição: Buscar estágios dos estudantes por setor.
+    
+    Returns: Retorna as informações dos estágios dos estudantes de um setor. Cada obeto retornado tem: 
     {
         id: Id do estágio,
         matricula_do_estudante: Matricula do estudante,
@@ -342,18 +429,29 @@ def get_estagios(base_url, inicio_de, fim_ate, unidade):
         "inicio-de": inicio_de,
         "fim-ate": fim_ate,
     }
-    
+
     response = requests.get(f'{base_url}/estagios', params=params)
 
     if response.status_code == 200:
         estagiarios = json.loads(response.text)
-
-        professores = get_professores(unidade)
+        professores = get_professores(setor)
+        professores = [professor['matricula_do_docente'] for professor  in professores]
 
         estagiarios_unidade = [
             estagiario for estagiario in estagiarios
-            if any(professor['matricula_do_docente'] == estagiario['matricula_do_docente'] for professor in professores)]
-        return estagiarios_unidade
+            if (estagiario['matricula_do_docente'] in professores)
+        ]
+
+        estados = list({estagiario['uf_concedente'] for estagiario in estagiarios_unidade})
+
+        estados_res = {}
+
+        for uf in estados:
+            estados_res[uf] = extrair_insights_estagios(estagiarios=estagiarios_unidade, uf=uf)
+    
+        return estados_res
 
     else:
         return None
+
+## Buscar o setor interessado
