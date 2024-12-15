@@ -454,4 +454,66 @@ def get_estagios(base_url, inicio_de, fim_ate, setor):
     else:
         return None
 
-## Buscar o setor interessado
+
+def get_turmas(base_url, periodo, disciplina):
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": disciplina
+    }
+    
+    response = requests.get(f'{base_url}/turmas', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+      return None
+
+
+def get_turmas(base_url, periodo, disciplina):
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": disciplina
+    }
+    
+    response = requests.get(f'{base_url}/turmas', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+      return None
+
+
+def get_estudantes_matriculados(base_url, periodo, disciplina, turma):
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": disciplina,
+        "turma": turma
+    }
+
+    response = requests.get(f'{base_url}/matriculas', params=params)
+
+    if response.status_code == 200:
+        matriculas = json.loads(response.text)
+        
+        medias = [
+            matricula["media_final"] 
+            if matricula["media_final"] is not None else 0
+            for matricula in matriculas
+        ]
+
+        return {
+            "medias_menores_que_5": 
+            len([media for media in medias if float(media) < 5]),
+            "medias_maior_ou_igual_a_5.0_e_menor_que_7.0": 
+            len([media for media in medias if float(media) >= 5 and float(media) < 7]),
+            "medias_maior_ou_igual_a_7.0_e_menor_que_8.5": 
+            len([media for media in medias if float(media) >= 7 and float(media) < 8.5]),
+            "medias_maior_ou_igual_a_8.5_e_menor_ou_igual_a_10": 
+            len([media for media in medias if float(media) >= 8.5 and float(media) <= 10])
+        }
+
+    else:
+      return None
