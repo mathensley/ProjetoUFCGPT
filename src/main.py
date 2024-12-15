@@ -2,6 +2,8 @@ import asyncio, sys
 from langchain_core.messages import HumanMessage
 from agents.build_agents import build
 
+from IPython.display import Image
+
 async def run(system, query, config):
     """
     Executa o sistema com uma query e retorna a resposta.
@@ -17,6 +19,7 @@ async def main():
     system = build()
     
     #print(system.get_graph().draw_mermaid())
+    #Image(system.get_graph().draw_png())
     
     if len(sys.argv) < 2:
         print("Erro.")
