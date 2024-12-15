@@ -25,8 +25,9 @@ EURECA_TOOLS = [
     get_campi, # testado
     get_matriculas, #
     get_calendarios, # testado
-    get_professores, #
-    get_estagios, #
+    get_total_professores, #
+    get_setores,
+    get_estagios #
 ]
 
 NOTICES_TOOLS = [

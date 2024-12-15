@@ -296,24 +296,6 @@ def get_calendarios(base_url, campus):
         return None
 
 
-def get_professores(base_url, setor):
-    """
-    Descrição: Busca a quantidade de professores de um centro.
-    
-    Returns: Retorna a quantidade de professores do centro.
-    """
-    params = {
-        "status": "ATIVO",
-        "setor": setor
-    }
-    response = requests.get(f'{base_url}/professores', params=params)
-
-    if response.status_code == 200:
-        return len(json.loads(response.text))
-    else:
-        return None
-
-
 
 
 
@@ -322,7 +304,7 @@ def get_professores(base_url, setor):
 
 
 # Sem tools
-def get_total_professores(base_url, setor):
+def get_professores(base_url, setor):
     """
     Descrição: Busca a quantidade de professores de um centro.
     
@@ -354,7 +336,7 @@ def get_setores(base_url, campus):
 
 
 # Sem tools
-def get_professores(base_url, setor):
+def get_total_professores(base_url, setor):
     """
     Descrição: Busca a quantidade de professores de um centro.
     
@@ -434,7 +416,7 @@ def get_estagios(base_url, inicio_de, fim_ate, setor):
 
     if response.status_code == 200:
         estagiarios = json.loads(response.text)
-        professores = get_professores(setor)
+        professores = get_professores(base_url, setor)
         professores = [professor['matricula_do_docente'] for professor  in professores]
 
         estagiarios_unidade = [
@@ -448,7 +430,6 @@ def get_estagios(base_url, inicio_de, fim_ate, setor):
 
         for uf in estados:
             estados_res[uf] = extrair_insights_estagios(estagiarios=estagiarios_unidade, uf=uf)
-    
         return estados_res
 
     else:
