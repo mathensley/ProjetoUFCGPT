@@ -6,4 +6,4 @@ base_url = "https://eureca.sti.ufcg.edu.br/das/v2"
 #print(get_cursos(base_url))
 #print(get_campi(base_url))
 
-print(get_curso(base_url, '14102100'))
+print(get_curso.invoke(base_url, '14102100'))

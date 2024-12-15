@@ -22,7 +22,11 @@ def get_cursos_ativos(base_url):
 
     if response.status_code == 200:
         data_json = json.loads(response.text)
-        return [{'codigo_do_curso': data['codigo_do_curso'], 'descricao': data['descricao']} for data in data_json]
+        return [{
+            'codigo_do_curso': data['codigo_do_curso'], 
+            'descricao': data['descricao']} 
+            for data in data_json
+        ]
     else:
         return None
 
@@ -65,6 +69,7 @@ def get_curso(base_url, curso):
     else:
         return None
 
+
 @tool
 def get_curriculos(base_url, curso):
     """
@@ -99,14 +104,20 @@ def get_curriculos(base_url, curso):
         carga_horaria_extensao: None,
         disciplina_atividades_complementares_flexiveis: Disciplinas de atividades complementares flexiveis,
         disciplina_atividades_complementares_extensao: Disciplinas de atividades complementares de extensão,
-        periodo_inicio: None}
+        periodo_inicio: Período de início
+    }
     """
-    response = requests.get(f'{base_url}/curriculos?curso={curso}')
+    
+    params = {
+        'curso': curso
+    }
+    response = requests.get(f'{base_url}/curriculos', params=params)
     
     if response.status_code == 200:
         return json.loads(response.text)
     else:
         return None
+
 
 @tool
 def get_disciplinas_curso(base_url, campus, curso, curriculo):
@@ -150,6 +161,7 @@ def get_disciplinas_curso(base_url, campus, curso, curriculo):
     else:
         return None
 
+
 @tool
 def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
     """
@@ -178,6 +190,7 @@ def get_plano_de_curso(base_url, codigo_disciplina, periodo_de, periodo_ate):
         return json.loads(response.text)
     else:
         return None
+
 
 @tool
 def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
@@ -208,6 +221,7 @@ def get_plano_de_aulas(base_url, codigo_disciplina, periodo_de, periodo_ate):
     else:
         return None
 
+
 @tool
 def get_campi(base_url):
     """
@@ -226,6 +240,7 @@ def get_campi(base_url):
         return json.loads(response.text)
     else:
         return None
+
 
 @tool
 def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, periodo_ate):
@@ -260,6 +275,7 @@ def get_matriculas(base_url, curso, codigo_disciplina, turma, periodo_de, period
     else:
         return None
 
+
 @tool
 def get_calendarios(base_url):
     """
@@ -285,10 +301,13 @@ def get_calendarios(base_url):
     else:
         return None
 
+
 @tool
 def get_professores(base_url, setor):
     """
     Descrição: Busca a quantidade de professores de um centro.
+    
+    Returns: Retorna a quantidade de professores do centro.
     """
     params = {
         "status": "ATIVO",
@@ -300,6 +319,7 @@ def get_professores(base_url, setor):
         return len(json.loads(response.text))
     else:
         return None
+
 
 @tool
 def get_estagios(base_url, inicio_de, fim_ate, unidade):
