@@ -1,0 +1,141 @@
+﻿Guia de Matrículas 2024.2
+Guia de Matrículas 2024.2
+O básico primeiro …
+Novo regulamento de Graduação
+Sobre trancamentos
+Como funciona a matrícula
+Disciplinas Optativas
+E se eu não conseguir vagas na matrícula?
+E se eu não conseguir vagas na rematrícula?
+Solicitação de vagas
+Comunicação de problemas
+Orientação para escolha de disciplinas
+Links importantes!
+Pré-requisitos
+Disciplinas com matrícula restrita
+Matrícula em TCC e Atividades Complementares Flexíveis
+O básico primeiro …
+* Leia este guia completamente antes de decidir sobre sua matrícula.
+* Fique atento aos e-mails enviados pelo coordenador. Essa é a forma mais efetiva de ficar a par das informações de última hora. Embora haja bastante planejamento, algumas mudanças no processo são inevitáveis.
+* Alunos ingressantes 2024.2 terão a matrícula feita pela PRE (automaticamente). Logo, alunos 2024.2 não precisam fazer nada no SIGAA. Mas faremos uma reunião de recepção e orientação para todos os ingressantes no dia 13/nov, às 10h, na sala RE09 no Bloco CB (bloco mais conhecido como REENGE). Para confirmar seu interesse em participar, peço que responda a este formulário. Essa sala comporta apenas 90 pessoas e, portanto, pedimos que apenas os ingressantes (ou seus procuradores) estejam presentes, de forma que haja espaço para todos.
+* Alunos veteranos farão a matrícula online no SIGAA.
+   1. Assista ao vídeo da PRE sobre como fazer matrícula
+   2. Como o sistema é novo e há muita dificuldade em obter informações precisas da PRE (até porque é novo pra eles também), abaixo explico o que esta coordenação entende do processo de matrículas.
+Novo regulamento de Graduação
+* A partir de 2024.2 entra em vigência o novo regulamento de graduação da UFCG.
+* Todo o processo de matrículas, bem como todas as ações relativas à graduação passam a ser regidas por esse regulamento.
+* Embora seja um documento bem extenso, é importante que você leia o documento. No mínimo, uma leitura diagonal e seletiva, para mapear as seções, capítulos e temas relevantes, para que, no futuro, você saiba onde buscar informações.
+* Todos os processos SEI a partir deste semestre passam a ser regidos também com base no novo regulamento. 
+Sobre trancamentos
+* No novo regulamento de curso, há três tipos de trancamento:
+   1. trancamento de curso: permite trancar um período letivo, desde que o aluno não tenha sido matriculado em disciplinas; há um período específico para isso no calendário acadêmico; é feita via SIGAA; 
+   2. trancamento (parcial) de matrículas: permite trancar uma ou mais disciplinas nas quais o aluno se encontre matriculado; também há período específico para isso no calendário acadêmico; há também regras próprias para esse trancamento no regulamento; é feita via SIGAA;
+   3. trancamento total de matrículas: semelhante à opção anterior, mas tem regras próprias, já que permite que o estudante tranque todas as disciplinas já matriculadas em um dado período; tem regras próprias diferentes das duas situações acima; e também há um período específico para isso no calendário acadêmico; é feita via SIGAA;
+Como funciona a matrícula agora?
+* O processo de matrícula no SIGAA é bem diferente do SCAO.
+* Ao invés de fazer sua matrícula como era no SCAO, você vai solicitar sua matrícula. Pode parecer apenas detalhe, mas não é. No primeiro caso, ao terminar o seu acesso ao SCAO, você estava matriculado nas turmas desejadas (e talvez precisasse pedir vagas adicionais, pras turmas nas quais não tivesse conseguido vaga). No SIGAA, na sua sessão com o sistema, vocâ vai apenas solicitar matrícula nas turmas (pense nesse momento, como algo semelhante à nossa antiga solicitação de reserva de vagas). Ao final dessa etapa, você não estará matriculado. Terá apenas feito seu pedido de matrícula que vai ser processado, junto a todos os pedidos, no dia 14/11 (esse é o plano, pelo menos).
+* O processamento da matrícula é feito de forma totalmente automática. É o sistema que vai usar os esquemas de priorização que estão implementados nele (e que refletem as regras determinadas no Art. 260 do novo regulamento; leia-o por completo!!!) e vai distribuir as vagas existentes em cada turma para os alunos que tiverem feito a solicitação.
+* A ordem de prioridade oficial dos discentes em cada disciplina é: blocado, provável concluinte, desblocado (atrasado na execução), adiantado e demais alunos.
+   * De acordo com o Art. 34 do novo regulamento, é considerado provável concluinte “aquele(a) com integralização curricular superior a 90% (noventa por cento) da carga horária total do Curso, excetuando-se a contabilização da carga horária das Atividades Complementares Flexíveis e de Atividades de Orientação Individual”. Contudo, não sei ao certo como a PRE fez a implementação, já que havia recomendação para registrarem as atividades complementares até o penúltimo semestre de curso. 
+
+
+* O § 5º do Art 260 do regulamento (transcrito abaixo), determina os critérios de priorização dentro de cada categoria acima mencionada.
+   * § 5º Dentro de cada ordem de prioridade, a preferência será dos(as) discentes que nunca trancaram ou foram reprovados por falta no componente curricular, tendo o IEA como critério de desempate.)
+   * Como não sei dizer se a ordem de solicitação será considerada em algum nível de desempate; só pra garantir, eu sugiro fazer sua matrícula no primeiro horário em que o sistema ficar disponível.
+Disciplinas Optativas
+* ATENÇÃO. Pela redação do novo regulamento, em disciplinas optativas, todos os alunos são tratados como desblocados pelo algoritmo. Veja a seguir a transcrição do § 3º do Art. 260. 
+   * § 3º A prioridade dos(as) discentes ingressantes sobre os demais, para os componentes curriculares do primeiro período da estrutura curricular à qual estão vinculados(as), é garantida por meio do plano de matrícula de ingressantes.
+   * Não está claro, por essa redação, se o aluno concluinte terá a prioridade como concluinte, mas estou assumindo que, sim, ele será tratado com maior prioridade que os demais. Mas, repito, não está 100% claro.
+   * Já para os pré-concluintes (alunos dos períodos P6, P7, P8 e P9 que não vão concluir em 2024.2), entendo que o sistema irá tratar com igual prioridade que os demais alunos. Por esse motivo, volto a reforçar que nenhum aluno dos períodos anteriores a P6 deveria solicitar matrículas em disciplinas optativas (lembre que nossa execução curricular padrão não prevê optativas antes do P6)  
+E se eu não conseguir vagas na matrícula?
+* Se após o processamento você não for matriculado nas turmas desejadas, você deve fazer o que o sistema chama de rematrícula (o que antes chamávamos de ajuste de matrículas).
+* Pelo que entendi, trata-se de processo semelhante à fase de matrículas, mas a ser executado apenas com as vagas que restarem nas turmas.
+   * Detalhe: eu entendo que essa etapa permitirá apenas adicionar solicitações de novas turmas, não de remover turmas (como era na etapa de ajustes do SCAO). 
+   * O processo de rematrícula permite solicitar tanto a adição como remoção de turmas da matrícula.
+* Isso significa que, no período indicado no calendário acadêmico, você deve entrar no SIGAA e solicitar vaga nas turmas adicionais em que deseje ser matriculado. Isso está previsto para ser nos dias 19 a 21 (mas confira o calendário acadêmico, pro caso de serem feitos ajustes).
+* Entendo que se você não fizer o ajuste, sua matrícula não terá mudanças. Então todo o cuidado, porque não está claro como será tratado o caso de matrículas que ficarem abaixo do mínimo de créditos.
+* E atenção! Entendo que se você ficar sem vaga em nenhuma disciplina, precisará fazer ajuste obrigatoriamente ou pedir o trancamento de curso (ver mais sobre trancamentos acima).
+* Tal como ocorreu na etapa de matrícula, o processamento do ajuste também será feito automaticamente pelo sistema, com base nas mesmas regras de priorização e desempate. Está previsto para ocorrer no dia 25/nov.
+
+
+E se eu não conseguir vagas na rematrícula?
+* Desta vez, é quase definitivo. Há apenas uma chance a mais de você conseguir vagas em outras turmas. É o que o novo regulamento e o SIGAA denominam de matrícula extraordinária.
+* No período de matrículas extraordinárias (previsto para os dias 28/nov a 11/dez), seu pedido será efetivado imediatamente, sem a necessidade da etapa de processamento. Contudo, fica limitado às vagas remanescentes após os períodos de matrícula, rematrícula e até ajuste de ofertas de vagas pelas unidades acadêmicas. Logo, é bom não contar com esta etapa como algo garantido.
+* Se ainda assim, você não conseguir a vaga nas turmas desejadas, infelizmente, não haverá nada mais que se possa fazer.
+* Se você não conseguiu, até esta etapa, se matricular em nenhuma disciplina, você deve solicitar o trancamento de curso (ver seção acima sobre trancamentos). Sugiro também ir à coordenação de curso para ajudarmos você nesse processo (ou ver se descobrimos outras alternativas). 
+Solicitação de vagas
+* Neste período, em que estamos usando o SIGAA pela primeira vez, não está prevista nenhuma forma de solicitar vagas adicionais em turmas, por fora do SIGAA.
+Comunicação de problemas
+* Neste período de adaptação ao SIGAA, a PRE está concentrando todas as atividades relativas ao processo de matrículas. Assim, a recomendação é que você entre em contato com os canais indicados pela PRE no próprio SIGAA para resolver problemas com o sistema.
+* Se os problemas persistirem, você pode também procurar a coordenação de curso. Vá presencialmente na secretaria da coordenação ou entre em contato pelo telefone ou whatsapp da coordenação. Se é urgente mesmo, o ideal é que você vá de forma presencial.
+
+
+Orientação para escolha de disciplinas
+* Mais do que nunca, a orientação da coordenação é que você tente se aproximar o máximo possível da execução curricular oficial do curso. 
+* Lembre que as mesmas regras continuarão valendo nos próximos períodos e que para ter prioridade máxima (o que é quase uma garantia de conseguir vagas sempre) é preciso estar blocado na execução curricular.
+* Em particular, evite deixar disciplinas de um período da execução curricular em troca de outras de outros períodos. Isso vai desblocar (atrasar) você em relação a essa disciplina e espalhar você em vários semestres, reduzindo seus índices acadêmicos.
+* Se você acha um semestre realmente muito difícil (e olhe que há vários mitos sobre o assunto circulando entre os alunos), é preferível apenas atrasar uma única disciplina, pra reduzir a carga, mas não adiantar outra no lugar da primeira. Se for mesmo o caso, apareça na coordenação (apenas de forma presencial) que oriento você na escolha.
+* Se você tem um histórico com muitas reprovações, o ideal é mesmo diminuir o passo. É melhor andar devagar, mas com mais segurança, do que tentar velocidade plena e deixar de pagar as disciplinas. Faça uma conta simples: quantos créditos você integralizou no total até agora? Em quantos semestres? Calcule seu pace e veja quantos créditos você acumula por semestre. O ideal é ficar um pouquinho acima de 20 para terminar o curso no tempo certo (faça as contas!). Se você está abaixo, contudo, vale a pena matricular em um número de créditos somente um pouquinho acima de seu pace. Isso permite pagar as disciplinas muito melhor. Lembre, contudo, que há o mínimo de 16 créditos a matricular por semestre a ser respeitado.
+* Observe ainda que nenhuma optativa deve ser paga antes de você estar efetivamente no 6o período. Se você tá pagando optativa junto com P1, com P2, com EDA, com OAC, com SO ou outras desses períodos, está fazendo bobagem! Refaça seu plano!
+Links importantes!
+* SIGAA
+* Vídeo da PRE sobre como fazer matrícula no SIGAA
+* Novo Regulamento de Graduação
+* Fluxograma da execução curricular padrão do curso
+* Currículo 2017 (antigo)
+   * Pré-requisitos do currículo 2017
+   * Projeto Pedagógico do Curso (PPC 2017)
+* Currículo 2023 (novo)
+   * Disciplinas e pré-requisitos do currículo 2023
+   * Projeto Pedagócio do Curso (PPC 2023)
+Pré-requisitos
+Para quem está no currículo velho (2017), há um conjunto de pré-requisitos sugeridos para as disciplinas. Esses pré-requisitos são tão importantes, que a maioria passou a ser obrigatório no novo currículo (2023). Ou seja, se você está no currículo novo (entrou no período 2023.2 ou migrou do velho para o novo), o próprio sistema irá impedir que sua matrícula seja feita sem os pré e os co-requisitos necessários (veja o fluxograma para conhecer esses requisitos).
+
+
+Se você estiver no currículo antigo, provavelmente isso não lhe afetará muito, já que a maior parte dos pré-requisitos sugeridos envolvem disciplinas dos primeiros 5 períodos, que você já deve ter cursado. De qualquer forma, você deve levar em conta a tabela de pré-requisitos sugeridos abaixo. A coordenação não irá permitir matrículas sem os devidos pré-requisitos, pois isso afeta o planejamento das disciplinas e o desempenho dos alunos nas mesmas.
+
+
+Além disso, há diversos pré-requisitos não formalmente exigidos pelo sistema, mas que são fortemente recomendados pelos professores das disciplinas e pela coordenação. Assim, sugerimos que evitem se matricular sem eles.
+
+
+Disciplina
+	Pré-requisitos ADICIONAIS sugeridos
+	Teoria dos Grafos
+	Programação II e Laboratório de Programação II
+	Projeto de Software
+	Estrutura de Dados e Laboratório de Estrutura de Dados
+	Paradigmas de Linguagens de Programação
+	Programação II e Laboratório de Programação II
+	Análise de Sistemas
+	Programação II e Laboratório de Programação II
+Engenharia de Software
+	Engenharia de Software
+	Programação II e Laboratório de Programação II
+	Banco de Dados I
+	Estrutura de Dados e Fundamentos de Matemática para Ciência da Computação I
+	Teoria da Computação
+	Lógica para Computação
+Grafos (pode ser em paralelo)
+	Inteligência Artificial
+	Estruturas de Dados e Introdução à Probabilidade
+Estatística Aplicada
+	Metodologia Científica
+	Estatística Aplicada (co-requisito)
+	Disciplinas com matrícula restrita
+Há algumas turmas que têm matrícula restrita (não estarão disponíveis no SIGAA e serão feitas manualmente pela coordenação de curso). As disciplinas são:
+* Prática de Ensino em Ciência da Computação I
+* Prática de Ensino em Ciência da Computação II
+* Algoritmos Avançados I
+* Algoritmos Avançados II
+* Algoritmos Avançados III
+* Algoritmos Avançados IV
+
+Para se matricular nelas, você deve solicitar aos professores responsáveis por cada disciplina, através dos formulários por eles publicados. No caso de Algoritmos Avançados, você deve solicitar via o formulário específico do professor Rohit para as disciplinas de Algoritmos Avançados. No caso das disciplinas de Prática de Ensino em Ciência da Computação, você deve procurar os professores das disciplinas em que deseja atuar e pedir a ele que inscreva você no formulário ou planilha operadas pelo professor Leandro Balby.
+
+
+Matrícula em TCC e Atividades Complementares Flexíveis
+Em primeiro lugar observe que, no novo regulamento, a componente curricular Trabalho de Conclusão de Curso (TCC) deixou de ser uma disciplina. Ela continua sendo uma componente curricular, mas passou para uma categoria diferente que não é mais considerada disciplina. Agora ela é uma atividade de orientação individual que, por sua vez, é uma atividade acadêmica que não forma turma, tal como a componente Atividades Complementares Flexíveis. Esses são os termos usados no novo regulamento (se quiser ler mais sobre o TCC, recomendo que leia a Seção V do novo regulamento de graduação, artigos 139 a 143).
+
+E como serão as matrículas nessas componentes curriculares? Pelo novo regulamento, as matrículas nessas componentes serão em período distinto das matrículas em disciplinas. Elas têm período especificado em separado no calendário acadêmico. Em 2024.2, o prazo é o dia 15/abril/2025. Ou seja, há bastante tempo pra essa matrícula e por esse motivo, não é necessário se preocupar com isso agora.
+
+Para solicitar as matrículas, a coordenação de curso irá enviar email especificamente sobre o assunto, provavelmente com um formulário pra você solicitar a matrícula. Mas atenção: a matrícula nessas componentes só deve ser feita quando você tiver 100% de certeza de que vai conseguir apresentar o que ela exige (o texto e a defesa do TCC ou o processo de solicitação de registro das atividades complementares flexíveis no SEI). Repito: o ideal é retardar a matrícula até você ter total certeza de que vai dar certo, pra evitar de falhar na componente e disso ficar registrado no currículo.
