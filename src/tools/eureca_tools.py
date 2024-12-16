@@ -185,31 +185,6 @@ def get_campi(base_url: str) -> list:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 @tool
-def get_matriculas(base_url: str, codigo_do_curso: str, codigo_disciplina: str, turma: str, periodo: str) -> list:
-    """
-    Buscar matrículas dos alunos
-
-    Args:
-
-    Returns:
-
-    """
-    params = {
-        'curso': codigo_do_curso,
-        'disciplina': codigo_disciplina,
-        'turma': turma,
-        'periodo-de': periodo,
-        'periodo-ate': periodo
-    }
-
-    response = requests.get(f'{base_url}/matriculas', params=params)
-
-    if response.status_code == 200:
-        return json.loads(response.text)
-    else:
-        return [{"erro": "Não foi possível obter informação da UFCG."}]
-
-@tool
 def get_calendarios(base_url: str, campus: str) -> list:
     """
     Buscar calendários da universidade. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
@@ -368,3 +343,79 @@ def get_estagios(base_url: str, ano: str, setor_centro_unidade: str) -> list:
         return estados_res
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+@tool
+def get_turmas(base_url: str, periodo: str, disciplina: str) -> list:
+    """
+    Buscar turmas.
+
+    Args:
+        base_url: URL base da API.
+        periodo: o período em que a turma está.
+        disciplina: a disciplina que a turma está.
+    
+    Returns:
+        Lista com informações relevantes das turmas.
+    
+    Nota:
+        Para usar este método, se o 'periodo' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_calendarios` e deve ser o último objeto da lista (o período mais recente).
+        Além disso, se a disciplina (código da disciplina) não for informado, porém o nome da disciplina e o nome do curso tiver sido informado, busque o curso em `get_cursos` e adisciplina desejada em `get_disciplinas_curso`
+    """
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": disciplina
+    }
+    
+    response = requests.get(f'{base_url}/turmas', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+      return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+def get_media_notas_turma_disciplina(base_url: str, periodo: str, disciplina: str, turma: str) -> dict:
+    """
+    Buscar as notas de estudantes em uma turma de uma disciplina.
+
+    Args:
+        base_url: URL base da API.
+        periodo: o período em que a turma está.
+        disciplina: a disciplina que a turma está.
+        turma: a turma em questão.
+    
+    Returns:
+        Dicionário com o intervalo das médias das notas de dada disciplina de uma turma.
+    
+    Nota:
+        Para usar este método, se a 'turma' não tiver sido informada pelo usuário, use a turma '01'.
+    """
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": disciplina,
+        "turma": turma
+    }
+
+    response = requests.get(f'{base_url}/matriculas', params=params)
+
+    if response.status_code == 200:
+        matriculas = json.loads(response.text)
+        
+        medias = [
+            matricula["media_final"] 
+            if matricula["media_final"] is not None else 0
+            for matricula in matriculas
+        ]
+        return {
+            "medias_menores_que_5": 
+            len([media for media in medias if float(media) < 5]),
+            "medias_maior_ou_igual_a_5.0_e_menor_que_7.0": 
+            len([media for media in medias if float(media) >= 5 and float(media) < 7]),
+            "medias_maior_ou_igual_a_7.0_e_menor_que_8.5": 
+            len([media for media in medias if float(media) >= 7 and float(media) < 8.5]),
+            "medias_maior_ou_igual_a_8.5_e_menor_ou_igual_a_10": 
+            len([media for media in medias if float(media) >= 8.5 and float(media) <= 10])
+        }
+    else:
+      return [{"erro": "Não foi possível obter informação da UFCG."}]

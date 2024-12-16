@@ -435,7 +435,6 @@ def get_estagios(base_url, inicio_de, fim_ate, setor):
     else:
         return None
 
-
 def get_turmas(base_url, periodo, disciplina):
     params = {
         "periodo-de": periodo,
@@ -449,22 +448,6 @@ def get_turmas(base_url, periodo, disciplina):
         return json.loads(response.text)
     else:
       return None
-
-
-def get_turmas(base_url, periodo, disciplina):
-    params = {
-        "periodo-de": periodo,
-        "periodo-ate": periodo,
-        "disciplina": disciplina
-    }
-    
-    response = requests.get(f'{base_url}/turmas', params=params)
-
-    if response.status_code == 200:
-        return json.loads(response.text)
-    else:
-      return None
-
 
 def get_estudantes_matriculados(base_url, periodo, disciplina, turma):
     params = {
