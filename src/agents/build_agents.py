@@ -21,6 +21,7 @@ EURECA_TOOLS = [
     get_curso, # testado
     get_curriculos, # testado
     get_disciplinas_curso, # testado
+    get_disciplina, #
     get_plano_de_curso, # 
     get_plano_de_aulas, # 
     get_campi, # testado

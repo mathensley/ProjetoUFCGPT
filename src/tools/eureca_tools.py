@@ -3,6 +3,39 @@ import numpy as np
 import json
 from langchain_core.tools import tool
 
+# Testado
+# Teste1: Quantos professores tem na unidade academica de letras?                           Resp: A Unidade Acadêmica de Letras possui 67 professores.
+# Teste2: Quantos professores tem no CEEI - CENTRO DE ENGENHARIA ELÉTRICA E INFORMÁTICA?    Resp: Não foi possível obter a quantidade de professores no CEEI - CENTRO DE ENGENHARIA ELÉTRICA E INFORMÁTICA, pois os professores pertencem às unidades acadêmicas específicas. Por favor, informe a unidade acadêmica desejada para obter essa informação.
+# Quantos professores tem na UFCG? 1684.
+@tool
+def get_total_professores(base_url: str, setor_unidade: str) -> int:
+    """
+    Busca a quantidade total de professores de um setor (unidade).
+
+    Args:
+        base_url: URL base da API.
+        setor_unidade: 'código_setor' (unidade) do campus.
+    
+    Returns:
+        Um inteiro que representa o total de professores de um setor (unidade).
+    
+    Nota:
+        Para usar este método, se o 'setor_unidade' (código do setor) não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_setores` baseado no nome da unidade fornecido pelo usuário.
+        Se o nome da unidade não tiver sido informado, e tiver sido informado 'UFCG' use uma string vazia como entrada para 'setor_unidade'.
+    """
+    params = {
+        "status": "ATIVO",
+        "setor": setor_unidade
+    }
+    response = requests.get(f'{base_url}/professores', params=params)
+
+    if response.status_code == 200:
+        return len(json.loads(response.text))
+    else:
+        return [{"erro": "Não foi possível obter a informação (possível causa: \nProfessores pertencem as unidades. Por favor, informe a unidade acadêmica.)."}]
+
+
+# Testado
 @tool
 def get_cursos_ativos(base_url: str) -> list:
     """
@@ -27,6 +60,9 @@ def get_cursos_ativos(base_url: str) -> list:
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
+
+# Testado.
+# Teste1: Me de as informacoes do curso de letras frances. Resp: Resposta correta.
 @tool
 def get_curso(base_url: str, codigo_do_curso: str) -> list:
     """
@@ -54,6 +90,20 @@ def get_curso(base_url: str, codigo_do_curso: str) -> list:
     else:
         return None
 
+
+# Testado.
+# Teste1: Qual o curriculo mais recente do curso de ciencia da computacao. Resp.: Código do currículo: 2023
+# Teste2: Quais são todos os curriculos do curso de ciencia da computacao? Resp.: 1. Currículo de código 1979, 2. Currículo de código 1990, 3. Currículo de código 1999, 4. Currículo de código 2017, 5. Currículo de código 2023
+# Teste3: Qual o curriculo mais recente do curso de engenharia civil? Resp.: 
+#           O currículo mais recente do curso de Engenharia Civil é o de 2014, que possui as seguintes características:- Código do Currículo: 2014
+#           - Regime: 1
+#           - Duração Mínima: 10 semestres
+#           - Duração Máxima: 15 semestres
+#           - Carga Horária Mínima Total: 3660 horas
+#           - Número Mínimo de Disciplinas Obrigatórias: 54
+#           - Número Mínimo de Disciplinas Optativas: 4
+#           - Número Mínimo de Atividades Complementares: 4
+#           - Número Mínimo de Disciplinas: 62
 @tool
 def get_curriculos(base_url: str, codigo_do_curso: str) -> list:
     """
@@ -67,7 +117,8 @@ def get_curriculos(base_url: str, codigo_do_curso: str) -> list:
         Lista com informações relevantes dos currículos do curso específico.
     
     Nota:
-        Para usar este método, se o 'codigo_do_curso' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_cursos_ativos`.
+        Para usar este método, se o 'codigo_do_curso' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_cursos_ativos` e recuperar o código do curso.
+        Se a pergunta for o curriculo mais recente e tiver apenas um curriculo, traga as informações desse único curriculo como resposta.
     """
     response = requests.get(f'{base_url}/curriculos?curso={codigo_do_curso}')
     
@@ -76,6 +127,7 @@ def get_curriculos(base_url: str, codigo_do_curso: str) -> list:
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
+# FAZER TESTE
 @tool
 def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo: str) -> list:
     """
@@ -84,6 +136,7 @@ def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo:
     Args:
         base_url: URL base da API.
         codigo_do_curso: código do curso.
+        codigo_curriculo: código do currículo
     
     Returns:
         Lista de disciplinas com 'codigo_da_disciplina' e 'nome'.
@@ -92,6 +145,7 @@ def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo:
         Para usar este método, se o 'codigo_currículo' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_curriculos`.
     """
     params = {
+        'campus': '01',
         'curso': codigo_do_curso,
         'curriculo': codigo_curriculo
     }
@@ -103,6 +157,41 @@ def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo:
         return [{'codigo_da_disciplina': data['codigo_da_disciplina'], 'nome': data['nome']} for data in res]
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+
+
+@tool
+def get_disciplina(base_url: str, codigo_do_curso: str, codigo_curriculo: str, codigo_da_disciplina: str) -> list:
+    """
+    Buscar as informações de uma disciplina.
+
+    Args:
+        base_url: URL base da API.
+        codigo_do_curso: código do curso.
+        codigo_curriculo: código do currículo
+        codigo_da_disciplina: código da disciplina específica.
+    
+    Returns:
+        Lista com informações relevantes sobre uma disciplica específica.
+    
+    Nota:
+        Para usar este método, se todos os parâmetros não tiverem sido informados pelo usuário, obtenha os parâmetros previamente com a tool `get_disciplinas_curso`.
+    """
+    params = {
+        'campus': '01',
+        'curso': codigo_do_curso,
+        'curriculo': codigo_curriculo,
+        'disciplina': codigo_da_disciplina
+    }
+
+    response = requests.get(f'{base_url}/disciplinas', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+
 
 @tool
 def get_plano_de_curso(base_url: str, codigo_disciplina: str, periodo: str) -> list:
@@ -209,31 +298,6 @@ def get_calendarios(base_url: str, campus: str) -> list:
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
-@tool
-def get_total_professores(base_url: str, setor_centro: str) -> int:
-    """
-    Busca a quantidade total de professores de um setor (centro).
-
-    Args:
-        base_url: URL base da API.
-        setor_centro: 'código_setor' (centro) do campus.
-    
-    Returns:
-        Um inteiro que representa o total de professores de um setor (centro).
-    
-    Nota:
-        Para usar este método, se o 'setor_centro' (código do setor) não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_setores` baseado no nome do centro fornecido pelo usuário..
-    """
-    params = {
-        "status": "ATIVO",
-        "setor": setor_centro
-    }
-    response = requests.get(f'{base_url}/professores', params=params)
-
-    if response.status_code == 200:
-        return len(json.loads(response.text))
-    else:
-        return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 def get_professores(base_url: str, setor_centro: str) -> list:
     """

@@ -68,7 +68,7 @@ def get_curso(base_url: str, course: str):
         return None
 
 
-def get_curriculos(base_url: str, curso: str) -> list:
+def get_curriculos(base_url: str, curso: str, curriculo: str) -> list:
     """
     Descrição: Buscar todos os currículos de um curso, ou seja, a grade curricular do curso. 
     
@@ -106,7 +106,8 @@ def get_curriculos(base_url: str, curso: str) -> list:
     """
     
     params = {
-        'curso': curso
+        'curso': curso,
+        'curriculo': curriculo
     }
     response = requests.get(f'{base_url}/curriculos', params=params)
     
@@ -116,7 +117,7 @@ def get_curriculos(base_url: str, curso: str) -> list:
         return None
 
 
-def get_disciplinas_curso(base_url, campus, curso, curriculo):
+def get_disciplinas_curso(base_url, curso, curriculo):
     """
     Descrição: Buscar todas as disciplinas de um curso.
     
@@ -145,7 +146,7 @@ def get_disciplinas_curso(base_url, campus, curso, curriculo):
     }
     """
     params = {
-        'campus': campus,
+        'campus': '01',
         'curso': curso,
         'curriculo': curriculo
     }
