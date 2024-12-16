@@ -2,6 +2,7 @@ import functools
 from dotenv import load_dotenv
 
 from tools.eureca_tools import *
+from tools.resolucao_tools import *
 from tools.guia_tools import *
 from tools.web_search_tools import *
 from prompts.system_prompts import *
@@ -21,7 +22,7 @@ EURECA_TOOLS = [
     get_curso, # testado
     get_curriculos, # testado
     get_disciplinas_curso, # testado
-    get_disciplina, #
+    get_disciplina, # testado
     get_plano_de_curso, # 
     get_plano_de_aulas, # 
     get_campi, # testado
@@ -31,6 +32,10 @@ EURECA_TOOLS = [
     get_estagios, #
     get_turmas, # testado (mais ou menos)
     get_media_notas_turma_disciplina # testado
+]
+
+RESOLUCAO_TOOLS = [
+    get_resolucao
 ]
 
 ENROLLMENT_GUIDE_TOOLS = [
@@ -79,6 +84,8 @@ def output_summarizing_node(state):
 
 eureca_agent = create_react_agent(model, tools=EURECA_TOOLS, state_modifier=EURECA_SYSTEM_PROMPT)
 eureca_node = functools.partial(agent_node, agent=eureca_agent, name="Agente_Eureca")
+resolucao_agent = create_react_agent(model, tools=RESOLUCAO_TOOLS, state_modifier=RESOLUCAO_SYSTEM_PROMPT)
+resolucao_node = functools.partial(agent_node, agent=resolucao_agent, name="Agente_Resolucao")
 enrollment_guide_agent = create_react_agent(model, tools=ENROLLMENT_GUIDE_TOOLS, state_modifier=ENROLLMENT_GUIDE_SYSTEM_PROMPT)
 enrollment_guide_node = functools.partial(agent_node, agent=enrollment_guide_agent, name="Agente_Guia_Matriculas")
 official_notices_agent = create_react_agent(model, tools=NOTICES_TOOLS, state_modifier=OFFICIAL_NOTICES_SYSTEM_PROMPT)
@@ -93,16 +100,19 @@ def build_flow() -> StateGraph:
 
     workflow.add_node("Agente_Supervisor", supervisor_agent)
     workflow.add_node("Agente_Eureca", eureca_node)
+    workflow.add_node("Agente_Resolucao", resolucao_node)
     workflow.add_node("Agente_Guia_Matriculas", enrollment_guide_node)
     workflow.add_node("Agente_Comunicados_Oficiais", official_notices_node)
     workflow.add_node("Agente_Sumarizador", output_summarizing_node)
 
     workflow.add_edge("Agente_Eureca", "Agente_Supervisor")
+    workflow.add_edge("Agente_Resolucao", "Agente_Supervisor")
     workflow.add_edge("Agente_Guia_Matriculas", "Agente_Supervisor")
     workflow.add_edge("Agente_Comunicados_Oficiais", "Agente_Supervisor")
     
     conditional_map = {
         "Agente_Eureca": "Agente_Eureca",
+        "Agente_Resolucao": "Agente_Resolucao",
         "Agente_Guia_Matriculas": "Agente_Guia_Matriculas",
         "Agente_Comunicados_Oficiais": "Agente_Comunicados_Oficiais",
         "Agente_Sumarizador": "Agente_Sumarizador",

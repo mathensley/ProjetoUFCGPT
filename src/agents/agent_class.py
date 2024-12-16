@@ -4,7 +4,7 @@ from typing import TypedDict, Annotated, Sequence, Literal
 from langchain_core.messages import BaseMessage
 from pydantic import BaseModel
 
-AGENTS = ["Agente_Eureca", "Agente_Guia_Matriculas", "Agente_Comunicados_Oficiais", "Agente_Sumarizador"]
+AGENTS = ["Agente_Eureca", "Agente_Resolucao", "Agente_Guia_Matriculas", "Agente_Comunicados_Oficiais", "Agente_Sumarizador"]
 OPTIONS = ("FINALIZAR",) + tuple(AGENTS)
 
 class RouteResponse(BaseModel):

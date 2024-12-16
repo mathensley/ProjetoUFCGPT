@@ -3,14 +3,14 @@ from rag.resolucao.resolucao_vectordb import load_vectordb
 
 def get_resolucao(query: str) -> str:
     """
-    Busca informações relevantes sobre questões de resolução da UFCG (relacionado a artigos de lei e regulamentações).
+    Busca informações relevantes sobre questões de resolução da UFCG (relacionadas a artigos de lei e regulamentos).
     Como modalidade de ensino, componentes curriculares, estrutura curricular, condições de realização de estágios, tcc, gestão acadêmica, atividades acadêmicas, etc.
 
     Args:
         query: pergunta ou consulta realizada pelo usuário.
 
     Returns:
-        String com as informações mais relevantes encontradas, separadas por *Parágrafo*, sobre o guia de matrículas, em que cada *Parágrafo* é uma provável resposta.
+        String com as informações mais relevantes encontradas, separadas por *Parágrafo:*, sobre o guia de matrículas, em que cada *Parágrafo:* é uma provável resposta.
 
     Nota:
         Caso não seja encontrado algo relevante, informe o usuário.
