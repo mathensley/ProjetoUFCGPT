@@ -159,7 +159,6 @@ def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 
-
 @tool
 def get_disciplina(base_url: str, codigo_do_curso: str, codigo_curriculo: str, codigo_da_disciplina: str) -> list:
     """
@@ -192,7 +191,6 @@ def get_disciplina(base_url: str, codigo_do_curso: str, codigo_curriculo: str, c
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 
-
 @tool
 def get_plano_de_curso(base_url: str, codigo_disciplina: str, periodo: str) -> list:
     """
@@ -208,7 +206,7 @@ def get_plano_de_curso(base_url: str, codigo_disciplina: str, periodo: str) -> l
     
     Nota:
         Para usar este método, se o 'codigo_disciplina' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_disciplinas_curso`.
-        Além disso, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, escolha o mais recente pelo método `get_calendarios`.
+        Além disso, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, escolha o mais recente pelo método `get_calendario_recente`.
     """
     params = {
         'disciplina': codigo_disciplina,
@@ -239,7 +237,10 @@ def get_plano_de_aulas(base_url: str, codigo_disciplina: str, periodo: str, nume
         Lista com informações relevantes do plano de aulas da turma de uma disciplina.
     
     Nota:
-
+        Busque o código do curso em get_cursos_ativos, recupere o código do curso e passe para a próxima instrução:
+        Se o código da disiciplina não tiver sido informada, busque o código em get_disciplinas_curso passando o código do curso. 
+        Se o período não tiver sido informado, utilize a tool get_calendario_recente para obter o período.
+        E se a turma não for especificada, use a turma '01' como turma padrão. 
     """
     params = {
         'disciplina': codigo_disciplina,
@@ -287,6 +288,32 @@ def get_calendarios(base_url: str, campus: str) -> list:
     
     Nota:
         Para usar este método, se o 'campus' (código do campus) não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_campi`.
+    """
+    params = {
+        'campus': campus
+    }
+    response = requests.get(f'{base_url}/calendarios', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+
+@tool
+def get_calendario_recente(base_url: str, campus: str) -> list:
+    """
+    Busca o calendário (período) mais recente da universidade.
+
+    Args:
+        base_url: URL base da API.
+        campus: código do campus.
+
+    Returns:
+        Calendário acadêmico mais recente do campus (como 'inicio_das_matriculas', 'inicio_das_aulas' e 'numero_de_semanas')
+    
+    Nota:
+        Para usar este método, se o 'campus' (código do campus) não tiver sido informado pelo usuário, use o campus '1'.
     """
     params = {
         'campus': campus

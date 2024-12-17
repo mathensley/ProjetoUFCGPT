@@ -18,6 +18,7 @@ from langgraph.checkpoint.memory import MemorySaver
 load_dotenv()
 
 EURECA_TOOLS = [
+    get_calendario_recente,
     get_cursos_ativos, # testado
     get_curso, # testado
     get_curriculos, # testado
