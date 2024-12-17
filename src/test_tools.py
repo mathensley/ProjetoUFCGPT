@@ -1,5 +1,6 @@
 from tools.web_search_tools import *
-from test_tools_eureca import *
+#from test_tools_eureca import *
+from tools.eureca_cc_tools import *
 from tools.guia_tools import *
 from tools.resolucao_tools import *
 #from rag.guia.guia_vectordb import *
@@ -12,7 +13,7 @@ base_url = "https://eureca.sti.ufcg.edu.br/das/v2"
 course = "14102100"
 #print(get_cursos_ativos(base_url))
 #print(get_campi(base_url))
-#print(get_disciplinas_curso(base_url, "01", course, "2023"))
+print(get_estudantes(base_url, '11105150'))
 
 
 #mem = Memory(chunking_strategy={"mode": "sliding_window", "window_size": 14, "overlap": 10})
@@ -21,4 +22,4 @@ course = "14102100"
 
 #mem = Memory(chunking_strategy={"mode": "sliding_window", "window_size": 14, "overlap": 10})
 #save_vectordb(mem, create_sections("./rag/resolucao/resolucao.pdf"), "./resolucao_db.pkl")
-print(get_resolucao("como os alunos ingressantes se matriculam?"))
+#print(get_resolucao("como os alunos ingressantes se matriculam?"))

@@ -2,6 +2,7 @@ import requests
 import numpy as np
 import json
 from langchain_core.tools import tool
+from datetime import datetime
 
 # Agente_Cursos_Eureca
 # Testado
@@ -118,27 +119,173 @@ def get_curriculo_mais_recente(base_url: str, codigo_do_curso: str) -> list:
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
-# Agente_Disciplinas_Turmas_Eureca
-# FAZER TESTE
 @tool
-def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo: str) -> list:
+def get_estudantes(base_url: str, codigo_do_curso: str) -> dict:
     """
-    Buscar todas as disciplinas de um curso.
+    Buscar informações gerais dos estudantes da UFCG com base no curso.
 
     Args:
         base_url: URL base da API.
         codigo_do_curso: código do curso.
+    
+    Returns:
+        Dicionário com informações como 'sexo', 'nacionalidades', 'idade' (míninma, máxima, média), 'estados' (siglas), renda_per_capita (quantidade de salário mínimo) e assim por diante.
+    
+    Nota:
+        Para usar este método, se o 'codigo_do_curso' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_cursos_ativos` e recuperar o código do curso.
+    """
+    params = {
+        "curso": codigo_do_curso,
+        "situacao-do-estudante": "ATIVOS"
+    }
+
+    response = requests.get(f'{base_url}/estudantes', params=params)
+
+    if response.status_code == 200:
+        estudantes = json.loads(response.text)
+
+        info = {
+            "sexo": {
+                "feminino": {
+                    "quantidade": 0,
+                    "estado_civil": {},
+                    "nacionalidades": {
+                        "brasileira": 0,
+                        "estrangeira": 0
+                    },
+                    "estados": {},
+                    "idade": {
+                        "idade_minima": None,
+                        "idade_maxima": None,
+                        "media_idades": 0
+                    },
+                    "politica_afirmativa": {},
+                    'cor': {},
+                    "renda_per_capita_ate": {
+                        "renda_minima": None,
+                        "renda_maxima": None,
+                        "renda_media": 0
+                    },
+                    "tipo_de_ensino_medio": {}
+                },
+                "masculino": {
+                    "quantidade": 0,
+                    "estado_civil": {},
+                    "nacionalidades": {
+                        "brasileira": 0,
+                        "estrangeira": 0
+                    },
+                    "estados": {},
+                    "idade": {
+                      "idade_minima": None,
+                      "idade_maxima": None,
+                      "media_idades": 0
+                    },
+                    "politica_afirmativa": {},
+                    'cor': {},
+                    "renda_per_capita_ate": {
+                        "renda_minima": None,
+                        "renda_maxima": None,
+                        "renda_media": 0
+                    },
+                    "tipo_de_ensino_medio": {}
+                }
+            },
+        }
+
+        for estudante in estudantes:
+            genero = estudante["genero"].lower()
+            genero_key = "feminino" if genero == "feminino" else "masculino"
+
+            genero_data = info["sexo"][genero_key]
+            genero_data["quantidade"] += 1
+
+            # Estado civil
+            estado_civil = estudante["estado_civil"]
+            if estado_civil is not None:
+                genero_data["estado_civil"][estado_civil] = genero_data["estado_civil"].get(estado_civil, 0) + 1
+
+            # Atualiza estados
+            estado = estudante["naturalidade"]
+            genero_data["estados"][estado] = genero_data["estados"].get(estado, 0) + 1
+
+            # Idade mínima, máxima e soma para média
+            idade = int(estudante["idade"])
+
+            if genero_data["idade"]["idade_minima"] is None or idade < genero_data["idade"]["idade_minima"]:
+                genero_data["idade"]["idade_minima"] = idade
+            if genero_data["idade"]["idade_maxima"] is None or idade > genero_data["idade"]["idade_maxima"]:
+                genero_data["idade"]["idade_maxima"] = idade
+
+            genero_data["idade"]["media_idades"] = genero_data["idade"].get("media_idades", 0) + idade
+
+            # Nacionalidades
+            nacionalidades = estudante["nacionalidade"].lower()
+            if "brasileira" in nacionalidades:
+                genero_data["nacionalidades"]["brasileira"] += 1
+            else:
+                genero_data["nacionalidades"]["estrangeira"] += 1
+
+            # Tipo de ensino médio
+            ensino_medio = estudante["tipo_de_ensino_medio"]
+            if (ensino_medio is not None):
+                genero_data["tipo_de_ensino_medio"][ensino_medio] = genero_data["tipo_de_ensino_medio"].get(ensino_medio, 0) + 1
+
+            # Atualiza renda per capita
+            renda = estudante["prac_renda_per_capita_ate"]
+            if genero_data["renda_per_capita_ate"]["renda_minima"] is None or (renda is not None and renda < genero_data["renda_per_capita_ate"]["renda_minima"]):
+                genero_data["renda_per_capita_ate"]["renda_minima"] = renda
+            if genero_data["renda_per_capita_ate"]["renda_maxima"] is None or (renda is not None and renda > genero_data["renda_per_capita_ate"]["renda_maxima"]):
+                genero_data["renda_per_capita_ate"]["renda_maxima"] = renda
+
+            if (renda is not None):
+                genero_data["renda_per_capita_ate"]["renda_media"] += renda
+            
+            # Cor
+            cor = estudante["cor"]
+            if cor is not None:
+                genero_data["cor"][cor] = genero_data["cor"].get(cor, 0) + 1
+
+            # Cotas
+            cota = estudante["politica_afirmativa"]
+            if cota is not None:
+                genero_data["politica_afirmativa"][cota] = genero_data["politica_afirmativa"].get(cota, 0) + 1
+
+        # Calcular médias finais
+        for genero_key in ["feminino", "masculino"]:
+            genero_data = info["sexo"][genero_key]
+            quantidade = genero_data["quantidade"]
+
+            if quantidade > 0:
+                # Média de idades
+                genero_data["idade"]["media_idades"] = round(genero_data["idade"]["media_idades"] / quantidade, 2)
+
+                # Média de renda
+                genero_data["renda_per_capita_ate"]["renda_media"] = round(genero_data["renda_per_capita_ate"]["renda_media"] / quantidade, 2)
+
+              # Imprimir resultado final
+        return info
+    else:
+        return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+# Agente_Disciplinas_Turmas_Eureca
+@tool
+def get_disciplinas_curso(base_url: str, codigo_curriculo: str) -> list:
+    """
+    Buscar todas as disciplinas do curso de Ciência da Computação da UFCG.
+
+    Args:
+        base_url: URL base da API.
         codigo_curriculo: código do currículo
     
     Returns:
         Lista de disciplinas com 'codigo_da_disciplina' e 'nome'.
     
     Nota:
-        Para usar este método, se o 'codigo_do_curso' e/ou 'codigo_currículo' não tiver sido informado pelo usuário, informe ao supervisor para buscar essa informação com o agente 'Agente_Cursos_Eureca'.
+        Para usar este método, se o 'codigo_currículo' não tiver sido informado pelo usuário, informe ao supervisor para buscar o currículo **mais recente** com o agente 'Agente_Cursos_Eureca'.
     """
     params = {
-        'campus': '01',
-        'curso': codigo_do_curso,
+        'curso': '14102100',
         'curriculo': codigo_curriculo
     }
 
@@ -151,14 +298,13 @@ def get_disciplinas_curso(base_url: str, codigo_do_curso: str, codigo_curriculo:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 # Agente_Disciplinas_Turmas_Eureca
-@tool
-def get_disciplina(base_url: str, codigo_do_curso: str, codigo_curriculo: str, codigo_da_disciplina: str) -> list:
+
+def get_disciplina(base_url: str, codigo_curriculo: str, codigo_da_disciplina: str) -> list:
     """
-    Buscar as informações de uma disciplina.
+    Buscar as informações de uma disciplina do curso de Ciência da Computação da UFCG.
 
     Args:
         base_url: URL base da API.
-        codigo_do_curso: código do curso.
         codigo_curriculo: código do currículo
         codigo_da_disciplina: código da disciplina específica.
     
@@ -166,12 +312,11 @@ def get_disciplina(base_url: str, codigo_do_curso: str, codigo_curriculo: str, c
         Lista com informações relevantes sobre uma disciplica específica.
     
     Nota:
-        Para usar este método, se o 'codigo_do_curso' e/ou 'codigo_currículo' não tiver sido informado pelo usuário, informe ao supervisor para buscar essa informação com outro agente.
+        Para usar este método, se o 'codigo_currículo' não tiver sido informado pelo usuário, informe ao supervisor para buscar o currículo mais recente com o agente 'Agente_Cursos_Eureca'.
         Para usar este método, se 'codigo_da_disciplina' não tiver sido informado pelo usuário, obtenha os parâmetros previamente com a tool `get_disciplinas_curso`.
     """
     params = {
-        'campus': '01',
-        'curso': codigo_do_curso,
+        'curso': '14102100',
         'curriculo': codigo_curriculo,
         'disciplina': codigo_da_disciplina
     }
@@ -184,22 +329,23 @@ def get_disciplina(base_url: str, codigo_do_curso: str, codigo_curriculo: str, c
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
 # Agente_Disciplinas_Turmas_Eureca
+# É preciso explicitar 'nome' seguido por 'nome_da_disciplina' na query
 @tool
 def get_plano_de_curso(base_url: str, codigo_disciplina: str, periodo: str) -> list:
     """
-    Plano de curso de uma disciplina.
+    Plano de curso de uma disciplina (do curso de Ciência da Computação).
 
     Args:
         base_url: URL base da API.
         codigo_disciplina: código da disciplina.
-        periodo: período letivo (calendário)
+        periodo: período letivo (exemplo: 2024.1, 2023.2, ...)
     
     Returns:
         Lista com informações relevantes do plano de curso de uma disciplina.
     
     Nota:
         Para usar este método, se o 'codigo_disciplina' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_disciplinas_curso`.
-        Além disso, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, escolha o mais recente pelo método `get_calendario_recente`.
+        Para usar este método, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, informe ao supervisor para buscar o **período mais recente** com o agente 'Agente_Campus_Eureca'.
     """
     params = {
         'disciplina': codigo_disciplina,
@@ -230,10 +376,9 @@ def get_plano_de_aulas(base_url: str, codigo_disciplina: str, periodo: str, nume
         Lista com informações relevantes do plano de aulas da turma de uma disciplina.
     
     Nota:
-        Busque o código do curso em get_cursos_ativos, recupere o código do curso e passe para a próxima instrução:
-        Se o código da disiciplina não tiver sido informada, busque o código em get_disciplinas_curso passando o código do curso. 
-        Se o período não tiver sido informado, utilize a tool get_calendario_recente para obter o período.
-        E se a turma não for especificada, use a turma '01' como turma padrão. 
+        Para usar este método, se o 'codigo_disciplina' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_disciplinas_curso`.
+        Além disso, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, informe ao supervisor para buscar o **período mais recente** com o agente 'Agente_Campus_Eureca'.
+        E se a turma não for especificada, use a turma '01' como turma padrão.
     """
     params = {
         'disciplina': codigo_disciplina,
@@ -249,11 +394,92 @@ def get_plano_de_aulas(base_url: str, codigo_disciplina: str, periodo: str, nume
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
+# Agente_Disciplinas_Turmas_Eureca
+@tool
+def get_turmas(base_url: str, periodo: str, codigo_disciplina: str) -> list:
+    """
+    Buscar turmas.
+
+    Args:
+        base_url: URL base da API.
+        periodo: o período em que a turma está.
+        codigo_disciplina: o código da disciplina que a turma está.
+    
+    Returns:
+        Lista com informações relevantes das turmas.
+    
+    Nota:
+        Para usar este método, se o 'codigo_disciplina' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_disciplinas_curso`.
+        Além disso, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, informe ao supervisor para buscar o **período mais recente** com o agente 'Agente_Campus_Eureca'.
+    """
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": codigo_disciplina
+    }
+    
+    response = requests.get(f'{base_url}/turmas', params=params)
+
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+      return [{"erro": "Não foi possível obter informação da UFCG."}]
+
+# Agente_Disciplinas_Turmas_Eureca
+@tool
+def get_media_notas_turma_disciplina(base_url: str, periodo: str, codigo_disciplina: str, turma: str) -> dict:
+    """
+    Buscar as notas de estudantes em uma turma de uma disciplina.
+
+    Args:
+        base_url: URL base da API.
+        periodo: o período em que a turma está.
+        codigo_disciplina: o código da disciplina que a turma está.
+        turma: a turma em questão.
+    
+    Returns:
+        Dicionário com o intervalo das médias das notas de dada disciplina de uma turma.
+    
+    Nota:
+        Para usar este método, se o 'codigo_disciplina' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_disciplinas_curso`.
+        Além disso, o 'periodo' deve ser informado pelo usuário, caso não seja fornecido, informe ao supervisor para buscar o **período mais recente** com o agente 'Agente_Campus_Eureca'.
+        E se a turma não for especificada, use a turma '01' como turma padrão.
+    """
+    params = {
+        "periodo-de": periodo,
+        "periodo-ate": periodo,
+        "disciplina": codigo_disciplina,
+        "turma": turma
+    }
+
+    response = requests.get(f'{base_url}/matriculas', params=params)
+
+    if response.status_code == 200:
+        matriculas = json.loads(response.text)
+        
+        medias = [
+            matricula["media_final"] 
+            if matricula["media_final"] is not None else 0
+            for matricula in matriculas
+        ]
+        return {
+            "medias_menores_que_5": 
+            len([media for media in medias if float(media) < 5]),
+            "medias_maior_ou_igual_a_5.0_e_menor_que_7.0": 
+            len([media for media in medias if float(media) >= 5 and float(media) < 7]),
+            "medias_maior_ou_igual_a_7.0_e_menor_que_8.5": 
+            len([media for media in medias if float(media) >= 7 and float(media) < 8.5]),
+            "medias_maior_ou_igual_a_8.5_e_menor_ou_igual_a_10": 
+            len([media for media in medias if float(media) >= 8.5 and float(media) <= 10])
+        }
+    else:
+      return [{"erro": "Não foi possível obter informação da UFCG."}]
+
 # Agente_Campus_Eureca
 @tool
 def get_campi(base_url: str) -> list:
     """
-    Buscar todos os campi
+    Buscar todos os campi.
 
     Args:
         base_url: URL base da API.
@@ -270,9 +496,9 @@ def get_campi(base_url: str) -> list:
 
 # Agente_Campus_Eureca
 @tool
-def get_calendarios(base_url: str, campus: str) -> list:
+def get_calendarios(base_url: str) -> list:
     """
-    Buscar calendários da universidade. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
+    Buscar calendários da universidade do campus 1 da UFCG. Ou seja, os periodos letivos que já ocorreram na UFCG até hoje.
 
     Args:
         base_url: URL base da API.
@@ -285,7 +511,7 @@ def get_calendarios(base_url: str, campus: str) -> list:
         Para usar este método, se o 'campus' (código do campus) não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_campi`.
     """
     params = {
-        'campus': campus
+        'campus': '1'
     }
     response = requests.get(f'{base_url}/calendarios', params=params)
 
@@ -298,7 +524,7 @@ def get_calendarios(base_url: str, campus: str) -> list:
 @tool
 def get_calendario_recente(base_url: str, campus: str) -> list:
     """
-    Busca o calendário (período) mais recente da universidade.
+    Busca o calendário (período) mais recente da universidade do campus 1.
 
     Args:
         base_url: URL base da API.
@@ -311,12 +537,12 @@ def get_calendario_recente(base_url: str, campus: str) -> list:
         Para usar este método, se o 'campus' (código do campus) não tiver sido informado pelo usuário, use o campus '01'.
     """
     params = {
-        'campus': campus
+        'campus': '1'
     }
     response = requests.get(f'{base_url}/calendarios', params=params)
 
     if response.status_code == 200:
-        return json.loads(response.text)
+        return json.loads(response.text)[-1]
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
 
@@ -387,7 +613,7 @@ def get_setores(base_url: str) -> list:
         Lista com informações relevantes do setor (centro) específico.
     """
     params = {
-        "campus": '01'
+        "campus": '1'
     }
     response = requests.get(f'{base_url}/setores', params=params)
 
@@ -437,8 +663,10 @@ def get_estagios(base_url: str, ano: str, setor_centro_unidade: str) -> list:
     
     Nota:
         Para usar este método, se o 'setor_centro_unidade' (código do setor) não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_setores` baseado no nome do centro ou unidade fornecido pelo usuário.
-        Da mesma forma, caso o ano de estágio não tiver sido informado pelo usuário, escolha o ano mais recente.
+        Da mesma forma, caso o ano de estágio não tiver sido informado pelo usuário, passe a string vazia.
     """
+    if ano == "" or not ano:
+        ano = str(datetime.now().year)
     params = {
         "inicio-de": ano,
         "fim-ate": ano
@@ -462,82 +690,3 @@ def get_estagios(base_url: str, ano: str, setor_centro_unidade: str) -> list:
         return estados_res
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]
-
-# Agente_Disciplinas_Turmas_Eureca
-@tool
-def get_turmas(base_url: str, periodo: str, disciplina: str) -> list:
-    """
-    Buscar turmas.
-
-    Args:
-        base_url: URL base da API.
-        periodo: o período em que a turma está.
-        disciplina: a disciplina que a turma está.
-    
-    Returns:
-        Lista com informações relevantes das turmas.
-    
-    Nota:
-        Para usar este método, se o 'periodo' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_calendarios` e deve ser o último objeto da lista (o período mais recente).
-        Além disso, se a disciplina (código da disciplina) não for informado, porém o nome da disciplina e o nome do curso tiver sido informado, busque o curso em `get_cursos` e a disciplina desejada em `get_disciplinas_curso`
-    """
-    params = {
-        "periodo-de": periodo,
-        "periodo-ate": periodo,
-        "disciplina": disciplina
-    }
-    
-    response = requests.get(f'{base_url}/turmas', params=params)
-
-    if response.status_code == 200:
-        return json.loads(response.text)
-    else:
-      return [{"erro": "Não foi possível obter informação da UFCG."}]
-
-# Agente_Disciplinas_Turmas_Eureca
-@tool
-def get_media_notas_turma_disciplina(base_url: str, periodo: str, disciplina: str, turma: str) -> dict:
-    """
-    Buscar as notas de estudantes em uma turma de uma disciplina.
-
-    Args:
-        base_url: URL base da API.
-        periodo: o período em que a turma está.
-        disciplina: a disciplina que a turma está.
-        turma: a turma em questão.
-    
-    Returns:
-        Dicionário com o intervalo das médias das notas de dada disciplina de uma turma.
-    
-    Nota:
-        Para usar este método, se a 'turma' não tiver sido informada pelo usuário, use a turma '01'.
-    """
-    params = {
-        "periodo-de": periodo,
-        "periodo-ate": periodo,
-        "disciplina": disciplina,
-        "turma": turma
-    }
-
-    response = requests.get(f'{base_url}/matriculas', params=params)
-
-    if response.status_code == 200:
-        matriculas = json.loads(response.text)
-        
-        medias = [
-            matricula["media_final"] 
-            if matricula["media_final"] is not None else 0
-            for matricula in matriculas
-        ]
-        return {
-            "medias_menores_que_5": 
-            len([media for media in medias if float(media) < 5]),
-            "medias_maior_ou_igual_a_5.0_e_menor_que_7.0": 
-            len([media for media in medias if float(media) >= 5 and float(media) < 7]),
-            "medias_maior_ou_igual_a_7.0_e_menor_que_8.5": 
-            len([media for media in medias if float(media) >= 7 and float(media) < 8.5]),
-            "medias_maior_ou_igual_a_8.5_e_menor_ou_igual_a_10": 
-            len([media for media in medias if float(media) >= 8.5 and float(media) <= 10])
-        }
-    else:
-      return [{"erro": "Não foi possível obter informação da UFCG."}]
