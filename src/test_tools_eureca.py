@@ -567,3 +567,4 @@ def pre_requisitos_disciplinas(base_url, disciplina, curriculo):
             disciplinas.append(disciplina_req[0]['nome'])
 
         return set(disciplinas)
+    
