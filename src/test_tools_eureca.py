@@ -482,3 +482,88 @@ def get_estudantes_matriculados(base_url, periodo, disciplina, turma):
 
     else:
       return None
+
+
+
+def get_estudantes_formados(base_url, codigo_curso, periodo):
+    params = {
+        "curso": codigo_curso,
+        "situacao-do-estudante": "EGRESSOS",
+        "periodo-de-evasao-de": periodo,
+        "periodo-de-evasao-ate": periodo
+    }
+
+    response = requests.get(f'{base_url}/estudantes', params=params)
+
+    if response.status_code == 200:
+        return len(json.loads(response.text))
+
+def get_horarios_disciplinas(base_url, disciplina, turma, periodo):
+    params = {
+        "disciplina": disciplina,
+        "turma": turma,
+        "periodo-de": periodo,
+        "periodo-ate": periodo
+    }
+
+    response = requests.get(f'{base_url}/horarios', params=params)
+
+    if response.status_code == 200:
+        horarios = json.loads(response.text)
+        
+        
+        filtros_horarios = []
+        turmas_map = {}
+
+        for horario in horarios:
+            turma = horario['turma']
+            sala = horario['codigo_da_sala']
+            dia = str(horario['dia'])
+            horario_formatado = f"{horario['hora_de_inicio']}h às {horario['hora_de_termino']}h"
+
+            if turma not in turmas_map:
+                turmas_map[turma] = {
+                    'turma': turma,
+                    'sala': sala,
+                    'horarios': {}
+                }
+                filtros_horarios.append(turmas_map[turma])
+
+            turmas_map[turma]['horarios'][dia] = horario_formatado
+
+        return filtros_horarios
+
+
+def get_disciplina(base_url, disciplina):
+  params = {
+    'disciplina': disciplina,
+  }
+
+  response = requests.get(f'{base_url}/disciplinas', params=params)
+
+  if response.status_code == 200:
+    return json.loads(response.text)
+  else:
+    return None
+
+def pre_requisitos_disciplinas(base_url, disciplina, curriculo):
+    params = {
+        'disciplina': disciplina,
+        'curriculo': curriculo
+    }
+
+    response = requests.get(f'{base_url}/pre-requisito-disciplinas', params=params)
+
+    if response.status_code == 200:
+        requisitos = json.loads(response.text)
+        disciplinas = []
+
+        for requisito in requisitos:
+            disciplina_req = get_disciplina(
+                base_url,
+                requisito['condicao'],
+            )
+
+            disciplinas.append(disciplina_req[0]['nome'])
+
+        return set(disciplinas)
