@@ -1,0 +1,45 @@
+* Predios - Computação:
+
+- SPLab: -7.212401717214597, -35.907364977837915
+
+- Camilo Lelis (CP ou LCC): -7.2127126687845795, -35.90753775544305
+
+- Reenge (RE): -7.2137696723288425, -35.90897686750616
+
+- CAA: -7.214340803269843, -35.90823501901644
+
+- Laboratório de Sistemas Distribuídos (LSD): -7.2130252429281825, -35.907184324169506
+
+- LSI, Lacina ou Brain: -7.21338439603298, -35.907397655387
+
+
+* Biblioteca
+
+- Biblioteca: -7.214762279910132, -35.90854570266897
+
+
+* Refeição:
+
+- Lanchonete do Joab: -7.2139392055640705, -35.907720892981196
+
+- Praça de alimentação de humanas: -7.216125434319644, -35.91057802227206
+
+- Lanchonete do Hélio (Quiosque do Helhão): -7.214761869235969, -35.90871418100428
+
+- Restaurante Universitário (RU): -7.215938158584126, -35.90954148521471
+
+
+* Bancos:
+
+- Banco do Brasil: -7.2158516,-35.9110474
+
+- Banco Caixa: -7.2161443,-35.910087
+
+- Sicredi: -7.2156007,-35.9109708
+
+
+* Prefeitura e reitoria:
+
+- Prefeitura universitária: -7.215824320491631, -35.908332441357864
+
+- Pró-reitoria (reitoria): -7.2172505,-35.9097048

@@ -14,7 +14,7 @@ def get_guia_de_matriculas(query: str) -> str:
     Nota:
         Caso não seja encontrado algo relevante, informe o usuário.
     """
-    mem = load_vectordb("./guia_db.pkl")
+    mem = load_vectordb("./rag/guia/guia_db.pkl")
     top_context = mem.search(query, top_n=4)
     seen = set()
     lista = []

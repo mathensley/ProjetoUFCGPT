@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from tools.eureca_cc_tools import *
 from tools.resolucao_tools import *
 from tools.guia_tools import *
+from tools.localizacao_tools import *
 from tools.web_search_tools import *
 from prompts.cc_system_prompts import *
 from .agent_class import *
@@ -17,30 +18,13 @@ from langgraph.checkpoint.memory import MemorySaver
 
 load_dotenv()
 
-'''EURECA_TOOLS = [
-    get_calendario_recente,
-    get_cursos_ativos, # testado
-    get_curso, # testado
-    get_curriculos, # testado
-    get_disciplinas_curso, # testado
-    get_disciplina, # testado
-    get_plano_de_curso, # 
-    get_plano_de_aulas, # 
-    get_campi, # testado
-    get_calendarios, # testado
-    get_total_professores, # testado
-    get_setores,
-    get_estagios, #
-    get_turmas, # testado (mais ou menos)
-    get_media_notas_turma_disciplina # testado
-]'''
-
 CURSOS_EURECA_TOOLS = [
     get_cursos_ativos,
     get_curso,
     get_curriculos,
     get_curriculo_mais_recente,
-    get_estudantes
+    get_estudantes,
+    get_estudantes_formados
 ]
 
 DISCIPLINAS_EURECA_TOOLS = [
@@ -49,7 +33,9 @@ DISCIPLINAS_EURECA_TOOLS = [
     get_plano_de_curso,
     get_plano_de_aulas,
     get_turmas,
-    get_media_notas_turma_disciplina
+    get_media_notas_turma_disciplina,
+    get_horarios_disciplinas,
+    pre_requisitos_disciplinas
 ]
 
 CAMPI_EURECA_TOOLS = [
@@ -68,6 +54,10 @@ RESOLUCAO_TOOLS = [
     get_resolucao
 ]
 
+LOCALIZACAO_TOOLS = [
+    read_localization_txt
+]
+
 ENROLLMENT_GUIDE_TOOLS = [
     get_guia_de_matriculas
 ]
@@ -76,7 +66,7 @@ NOTICES_TOOLS = [
     read_page
 ]
 
-model = ChatOpenAI(model="gpt-3.5-turbo")
+model = ChatOpenAI(model="gpt-4o")
 
 async def agent_node(state, agent, name):
     try:
@@ -112,9 +102,6 @@ def output_summarizing_node(state):
         ]
     }
 
-#eureca_agent = create_react_agent(model, tools=EURECA_TOOLS, state_modifier=EURECA_SYSTEM_PROMPT)
-#eureca_node = functools.partial(agent_node, agent=eureca_agent, name="Agente_Eureca")
-
 # Agente_Cursos_Eureca
 cursos_eureca_agent = create_react_agent(model, tools=CURSOS_EURECA_TOOLS, state_modifier=CURSOS_SYSTEM_PROMPT)
 cursos_eureca_node = functools.partial(agent_node, agent=cursos_eureca_agent, name="Agente_Cursos_Eureca")
@@ -133,6 +120,9 @@ resolucao_node = functools.partial(agent_node, agent=resolucao_agent, name="Agen
 # Agente_Guia_Matriculas
 enrollment_guide_agent = create_react_agent(model, tools=ENROLLMENT_GUIDE_TOOLS, state_modifier=ENROLLMENT_GUIDE_SYSTEM_PROMPT)
 enrollment_guide_node = functools.partial(agent_node, agent=enrollment_guide_agent, name="Agente_Guia_Matriculas")
+# Agente_Localizacao
+localizacao_agent = create_react_agent(model, tools=LOCALIZACAO_TOOLS, state_modifier=LOCALIZACAO_SYSTEM_PROMPT)
+localizacao_node = functools.partial(agent_node, agent=localizacao_agent, name="Agente_Localizacao")
 # Agente_Comunicados_Oficiais
 official_notices_agent = create_react_agent(model, tools=NOTICES_TOOLS, state_modifier=OFFICIAL_NOTICES_SYSTEM_PROMPT)
 official_notices_node = functools.partial(agent_node, agent=official_notices_agent, name="Agente_Comunicados_Oficiais")
@@ -145,22 +135,22 @@ def build_flow() -> StateGraph:
     workflow = StateGraph(AgentState)
 
     workflow.add_node("Agente_Supervisor", supervisor_agent)
-    #workflow.add_node("Agente_Eureca", eureca_node)
     workflow.add_node("Agente_Cursos_Eureca", cursos_eureca_node)
     workflow.add_node("Agente_Disciplinas_Turmas_Eureca", disciplinas_eureca_node)
     workflow.add_node("Agente_Campus_Eureca", campus_eureca_node)
     workflow.add_node("Agente_Setor_Professor_Estagio_Eureca", set_prof_est_eureca_node)
     workflow.add_node("Agente_Resolucao", resolucao_node)
     workflow.add_node("Agente_Guia_Matriculas", enrollment_guide_node)
+    workflow.add_node("Agente_Localizacao", localizacao_node)
     workflow.add_node("Agente_Comunicados_Oficiais", official_notices_node)
     workflow.add_node("Agente_Sumarizador", output_summarizing_node)
 
-    #workflow.add_edge("Agente_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Cursos_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Disciplinas_Turmas_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Campus_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Setor_Professor_Estagio_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Resolucao", "Agente_Supervisor")
+    workflow.add_edge("Agente_Localizacao", "Agente_Supervisor")
     workflow.add_edge("Agente_Guia_Matriculas", "Agente_Supervisor")
     workflow.add_edge("Agente_Comunicados_Oficiais", "Agente_Supervisor")
     
@@ -172,6 +162,7 @@ def build_flow() -> StateGraph:
         "Agente_Resolucao": "Agente_Resolucao",
         "Agente_Guia_Matriculas": "Agente_Guia_Matriculas",
         "Agente_Comunicados_Oficiais": "Agente_Comunicados_Oficiais",
+        "Agente_Localizacao": "Agente_Localizacao",
         "Agente_Sumarizador": "Agente_Sumarizador",
         "FINALIZAR": "Agente_Sumarizador"
     }
