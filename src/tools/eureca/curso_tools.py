@@ -272,7 +272,7 @@ def get_estudantes(base_url: str, codigo_do_curso: str) -> dict:
 
 # Agente_Cursos_Eureca
 @tool
-def get_estudantes_formados(base_url: str, codigo_do_curso: str, periodo: str) -> int:
+def get_estudantes_formados(base_url: str, codigo_do_curso: str, periodo: str) -> str:
     """
     Buscar a quantidade de estudantes formados (egressos).
 
@@ -282,7 +282,10 @@ def get_estudantes_formados(base_url: str, codigo_do_curso: str, periodo: str) -
         periodo: periodo: período letivo (exemplo: '2024.1', '2023.2', ...)
     
     Returns:
-        Inteiro com o número de estudantes formados (egressos).
+        String com o número de estudantes formados (egressos).
+    
+    Exemplo:
+        "20 formados"
     
     Nota:
         Para usar este método, se o 'codigo_do_curso' não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_cursos_ativos` e recuperar o código do curso.
@@ -298,6 +301,7 @@ def get_estudantes_formados(base_url: str, codigo_do_curso: str, periodo: str) -
     response = requests.get(f'{base_url}/estudantes', params=params)
 
     if response.status_code == 200:
-        return len(json.loads(response.text))
+        res = len(json.loads(response.text))
+        return f'"{res} formados"'
     else:
         return [{"erro": "Não foi possível obter informação da UFCG."}]

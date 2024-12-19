@@ -3,7 +3,7 @@ from langchain_core.tools import tool
 #@tool
 def read_localization_txt(query: str) -> str:
     """
-    Buscar localizações (link do Google Maps) de alguns locais da UFCG.
+    Buscar localizações (nome + link do Google Maps) de alguns locais da UFCG.
 
     Args:
         query: pergunta ou consulta realizada pelo usuário.

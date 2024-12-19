@@ -54,7 +54,7 @@ def get_professores(base_url: str, setor_centro: str) -> list:
 # Teste2: Quantos professores tem no CEEI - CENTRO DE ENGENHARIA ELÉTRICA E INFORMÁTICA?    Resp: Não foi possível obter a quantidade de professores no CEEI - CENTRO DE ENGENHARIA ELÉTRICA E INFORMÁTICA, pois os professores pertencem às unidades acadêmicas específicas. Por favor, informe a unidade acadêmica desejada para obter essa informação.
 # Quantos professores tem na UFCG? 1684.
 @tool
-def get_total_professores(base_url: str, setor_unidade: str) -> int:
+def get_total_professores(base_url: str, setor_unidade: str) -> str:
     """
     Busca a quantidade total de professores de um setor (unidade).
 
@@ -63,8 +63,10 @@ def get_total_professores(base_url: str, setor_unidade: str) -> int:
         setor_unidade: 'código_setor' (unidade) do campus.
     
     Returns:
-        Um inteiro que representa o total de professores de um setor (unidade).
+        String que representa o total de professores de um setor (unidade).
     
+    Exemplo:
+        "44 professores".
     Nota:
         Para usar este método, se o 'setor_unidade' (código do setor) não tiver sido informado pelo usuário, ele deve ser obtido previamente por `get_setores` baseado no nome da unidade fornecido pelo usuário.
         Se o nome da unidade não tiver sido informado, e tiver sido informado 'UFCG' use uma string vazia como entrada para 'setor_unidade'.
@@ -76,7 +78,8 @@ def get_total_professores(base_url: str, setor_unidade: str) -> int:
     response = requests.get(f'{base_url}/professores', params=params)
 
     if response.status_code == 200:
-        return len(json.loads(response.text))
+        res = len(json.loads(response.text))
+        return f'"{res} professores"'
     else:
         return [{"erro": "Não foi possível obter a informação (possível causa: \nProfessores pertencem as unidades. Por favor, informe a unidade acadêmica.)."}]
 
