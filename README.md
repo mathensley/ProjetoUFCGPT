@@ -48,7 +48,12 @@ O último conjunto de agentes será voltado para o Guia de Matrículas de Dalton
 - Python: Linguagem principal para desenvolvimento de agentes e processamento de linguagem natural.
 - NLTK e SpaCy: Bibliotecas para PLN, usadas para processar e entender as perguntas dos usuários.
 - Flask: Frameworks para construir APIs que servirão os agentes de resposta.
-  
+- Eureca: Dados abertos da Universidade Federal de Campina Grande.
+- LangChain.
+- LangGraph.
+- BERT.
+- vector DB.
+
 ## Contato
 Para mais informações ou dúvidas, entre em contato com os membros da equipe:
 
