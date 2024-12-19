@@ -1,11 +1,14 @@
 import functools
 from dotenv import load_dotenv
 
-from tools.eureca_cc_tools import *
-from tools.resolucao_tools import *
-from tools.guia_tools import *
-from tools.localizacao_tools import *
-from tools.web_search_tools import *
+from tools.eureca.curso_tools import *
+from tools.eureca.disciplina_tools import *
+from tools.eureca.campus_tools import *
+from tools.eureca.setor_prof_estagio_tools import *
+from tools.other.resolucao_tools import *
+from tools.other.guia_tools import *
+from tools.other.localizacao_tools import *
+from tools.other.web_search_tools import *
 from prompts.cc_system_prompts import *
 from .agent_class import *
 
@@ -41,7 +44,7 @@ DISCIPLINAS_EURECA_TOOLS = [
 CAMPI_EURECA_TOOLS = [
     get_campi,
     get_calendarios,
-    get_calendario_recente
+    get_periodo_mais_recente
 ]
 
 SETOR_PROFESSOR_ESTAGIO_TOOLS = [
@@ -117,9 +120,9 @@ set_prof_est_eureca_node = functools.partial(agent_node, agent=set_prof_est_eure
 # Agente_Resolucao
 resolucao_agent = create_react_agent(model, tools=RESOLUCAO_TOOLS, state_modifier=RESOLUCAO_SYSTEM_PROMPT)
 resolucao_node = functools.partial(agent_node, agent=resolucao_agent, name="Agente_Resolucao")
-# Agente_Guia_Matriculas
+# Agente_Matriculas
 enrollment_guide_agent = create_react_agent(model, tools=ENROLLMENT_GUIDE_TOOLS, state_modifier=ENROLLMENT_GUIDE_SYSTEM_PROMPT)
-enrollment_guide_node = functools.partial(agent_node, agent=enrollment_guide_agent, name="Agente_Guia_Matriculas")
+enrollment_guide_node = functools.partial(agent_node, agent=enrollment_guide_agent, name="Agente_Matriculas")
 # Agente_Localizacao
 localizacao_agent = create_react_agent(model, tools=LOCALIZACAO_TOOLS, state_modifier=LOCALIZACAO_SYSTEM_PROMPT)
 localizacao_node = functools.partial(agent_node, agent=localizacao_agent, name="Agente_Localizacao")
@@ -140,7 +143,7 @@ def build_flow() -> StateGraph:
     workflow.add_node("Agente_Campus_Eureca", campus_eureca_node)
     workflow.add_node("Agente_Setor_Professor_Estagio_Eureca", set_prof_est_eureca_node)
     workflow.add_node("Agente_Resolucao", resolucao_node)
-    workflow.add_node("Agente_Guia_Matriculas", enrollment_guide_node)
+    workflow.add_node("Agente_Matriculas", enrollment_guide_node)
     workflow.add_node("Agente_Localizacao", localizacao_node)
     workflow.add_node("Agente_Comunicados_Oficiais", official_notices_node)
     workflow.add_node("Agente_Sumarizador", output_summarizing_node)
@@ -151,7 +154,7 @@ def build_flow() -> StateGraph:
     workflow.add_edge("Agente_Setor_Professor_Estagio_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Resolucao", "Agente_Supervisor")
     workflow.add_edge("Agente_Localizacao", "Agente_Supervisor")
-    workflow.add_edge("Agente_Guia_Matriculas", "Agente_Supervisor")
+    workflow.add_edge("Agente_Matriculas", "Agente_Supervisor")
     workflow.add_edge("Agente_Comunicados_Oficiais", "Agente_Supervisor")
     
     conditional_map = {
@@ -160,7 +163,7 @@ def build_flow() -> StateGraph:
         "Agente_Campus_Eureca": "Agente_Campus_Eureca",
         "Agente_Setor_Professor_Estagio_Eureca": "Agente_Setor_Professor_Estagio_Eureca",
         "Agente_Resolucao": "Agente_Resolucao",
-        "Agente_Guia_Matriculas": "Agente_Guia_Matriculas",
+        "Agente_Matriculas": "Agente_Matriculas",
         "Agente_Comunicados_Oficiais": "Agente_Comunicados_Oficiais",
         "Agente_Localizacao": "Agente_Localizacao",
         "Agente_Sumarizador": "Agente_Sumarizador",

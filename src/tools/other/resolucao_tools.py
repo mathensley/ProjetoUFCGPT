@@ -16,7 +16,7 @@ def get_resolucao(query: str) -> str:
         Caso não seja encontrado algo relevante, informe o usuário.
     """
     mem = load_vectordb("./rag/resolucao/resolucao_db.pkl")
-    top_context = mem.search(query, top_n=4)
+    top_context = mem.search(query, top_n=5)
     seen = set()
     lista = []
     for context in top_context:

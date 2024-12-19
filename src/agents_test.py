@@ -8,8 +8,8 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 from pydantic import BaseModel
-from prompts.system_prompts import *
-from tools.web_search_tools import *
+from prompts.backups.system_prompts import *
+from tools.other.web_search_tools import *
 
 load_dotenv()
 
