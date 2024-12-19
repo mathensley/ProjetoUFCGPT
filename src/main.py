@@ -1,6 +1,6 @@
 import asyncio, sys
 from langchain_core.messages import HumanMessage
-from agents.build_agents import build
+from .agents.build_agents import build
 
 from IPython.display import Image
 
@@ -39,7 +39,7 @@ async def main():
     system = build()
     
     #print(system.get_graph().draw_mermaid())
-    #Image(system.get_graph().draw_png())
+    Image(system.get_graph().draw_png("output.png"))
     
     if len(sys.argv) < 2:
         await run_interactive(system)

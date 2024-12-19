@@ -18,7 +18,7 @@ Este agente será responsável por responder a perguntas sobre a UFCG, mais espe
 - Cursos
 - Campus
 - Centros
-- Unidades
+- Unidagit pudes
 - Turmas
 - Estudantes
 - Regulamento
