@@ -171,6 +171,7 @@ section {
     width: 100%;
     flex-wrap: wrap;
     padding: 20px 0px;
+    white-space: pre-wrap;
 }
 
 .user__response {

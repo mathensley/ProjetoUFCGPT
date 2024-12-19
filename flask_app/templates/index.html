@@ -88,6 +88,7 @@
                 timeout: 60000,
                 data: { user_input: message },
                 success: function (response) {
+                    console.log("Resposta do servidor:", response);
                     $('.bot__name__response').last().text(response.response); // Atualiza a última resposta
                     const cleanedResponse = (response.response.trim()).replace(/['"]/g, '');
                     $('.audio-button').last().attr("onClick", `speak('${cleanedResponse}')`);

@@ -1,15 +1,15 @@
 import functools
 from dotenv import load_dotenv
 
-from tools.eureca.curso_tools import *
-from tools.eureca.disciplina_tools import *
-from tools.eureca.campus_tools import *
-from tools.eureca.setor_prof_estagio_tools import *
-from tools.other.resolucao_tools import *
-from tools.other.guia_tools import *
-from tools.other.localizacao_tools import *
-from tools.other.web_search_tools import *
-from prompts.cc_system_prompts import *
+from ..tools.eureca.curso_tools import *
+from ..tools.eureca.disciplina_tools import *
+from ..tools.eureca.campus_tools import *
+from ..tools.eureca.setor_prof_estagio_tools import *
+from ..tools.other.resolucao_tools import *
+from ..tools.other.guia_tools import *
+from ..tools.other.localizacao_tools import *
+from ..tools.other.web_search_tools import *
+from ..prompts.cc_system_prompts import *
 from .agent_class import *
 
 from langchain_openai import ChatOpenAI
@@ -179,6 +179,6 @@ def build():
     """
     Costrói o fluxo dos agentes + memory e compila
     """
-    memory = MemorySaver()
+    #memory = MemorySaver()
     workflow = build_flow()
-    return workflow.compile(checkpointer=memory)
+    return workflow.compile()

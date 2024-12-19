@@ -1,5 +1,5 @@
 from langchain_core.tools import tool
-from rag.guia.guia_vectordb import load_vectordb
+from ...rag.guia.guia_vectordb import load_vectordb
 
 def get_guia_de_matriculas(query: str) -> str:
     """
@@ -14,7 +14,7 @@ def get_guia_de_matriculas(query: str) -> str:
     Nota:
         Caso não seja encontrado algo relevante, informe o usuário.
     """
-    mem = load_vectordb("./rag/guia/guia_db.pkl")
+    mem = load_vectordb("./src/rag/guia/guia_db.pkl")
     top_context = mem.search(query, top_n=4)
     seen = set()
     lista = []
