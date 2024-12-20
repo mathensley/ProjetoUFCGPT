@@ -39,7 +39,7 @@ async def main():
     system = build()
     
     #print(system.get_graph().draw_mermaid())
-    Image(system.get_graph().draw_png("output.png"))
+    #Image(system.get_graph().draw_png("output.png"))
     
     if len(sys.argv) < 2:
         await run_interactive(system)

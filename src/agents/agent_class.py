@@ -12,6 +12,7 @@ AGENTS = [
     "Agente_Resolucao", 
     "Agente_Matriculas", 
     "Agente_Localizacao", 
+    "Agente_Biblioteca", 
     "Agente_Comunicados_Oficiais", 
     "Agente_Sumarizador"
 ]

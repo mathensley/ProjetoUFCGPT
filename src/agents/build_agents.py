@@ -8,6 +8,7 @@ from ..tools.eureca.setor_prof_estagio_tools import *
 from ..tools.other.resolucao_tools import *
 from ..tools.other.guia_tools import *
 from ..tools.other.localizacao_tools import *
+from ..tools.other.biblioteca_tools import *
 from ..tools.other.web_search_tools import *
 from ..prompts.cc_system_prompts import *
 from .agent_class import *
@@ -59,6 +60,10 @@ RESOLUCAO_TOOLS = [
 
 LOCALIZACAO_TOOLS = [
     read_localization_txt
+]
+
+BIBLIOTECA_TOOLS = [
+    get_livros
 ]
 
 ENROLLMENT_GUIDE_TOOLS = [
@@ -126,6 +131,9 @@ enrollment_guide_node = functools.partial(agent_node, agent=enrollment_guide_age
 # Agente_Localizacao
 localizacao_agent = create_react_agent(model, tools=LOCALIZACAO_TOOLS, state_modifier=LOCALIZACAO_SYSTEM_PROMPT)
 localizacao_node = functools.partial(agent_node, agent=localizacao_agent, name="Agente_Localizacao")
+# Agente_Biblioteca
+biblioteca_agent = create_react_agent(model, tools=BIBLIOTECA_TOOLS, state_modifier=BIBLIOTECA_SYSTEM_PROMPT)
+biblioteca_node = functools.partial(agent_node, agent=biblioteca_agent, name="Agente_Biblioteca")
 # Agente_Comunicados_Oficiais
 official_notices_agent = create_react_agent(model, tools=NOTICES_TOOLS, state_modifier=OFFICIAL_NOTICES_SYSTEM_PROMPT)
 official_notices_node = functools.partial(agent_node, agent=official_notices_agent, name="Agente_Comunicados_Oficiais")
@@ -145,6 +153,7 @@ def build_flow() -> StateGraph:
     workflow.add_node("Agente_Resolucao", resolucao_node)
     workflow.add_node("Agente_Matriculas", enrollment_guide_node)
     workflow.add_node("Agente_Localizacao", localizacao_node)
+    workflow.add_node("Agente_Biblioteca", biblioteca_node)
     workflow.add_node("Agente_Comunicados_Oficiais", official_notices_node)
     workflow.add_node("Agente_Sumarizador", output_summarizing_node)
 
@@ -154,6 +163,7 @@ def build_flow() -> StateGraph:
     workflow.add_edge("Agente_Setor_Professor_Estagio_Eureca", "Agente_Supervisor")
     workflow.add_edge("Agente_Resolucao", "Agente_Supervisor")
     workflow.add_edge("Agente_Localizacao", "Agente_Supervisor")
+    workflow.add_edge("Agente_Biblioteca", "Agente_Supervisor")
     workflow.add_edge("Agente_Matriculas", "Agente_Supervisor")
     workflow.add_edge("Agente_Comunicados_Oficiais", "Agente_Supervisor")
     
@@ -164,8 +174,9 @@ def build_flow() -> StateGraph:
         "Agente_Setor_Professor_Estagio_Eureca": "Agente_Setor_Professor_Estagio_Eureca",
         "Agente_Resolucao": "Agente_Resolucao",
         "Agente_Matriculas": "Agente_Matriculas",
-        "Agente_Comunicados_Oficiais": "Agente_Comunicados_Oficiais",
         "Agente_Localizacao": "Agente_Localizacao",
+        "Agente_Biblioteca": "Agente_Biblioteca",
+        "Agente_Comunicados_Oficiais": "Agente_Comunicados_Oficiais",
         "Agente_Sumarizador": "Agente_Sumarizador",
         "FINALIZAR": "Agente_Sumarizador"
     }
