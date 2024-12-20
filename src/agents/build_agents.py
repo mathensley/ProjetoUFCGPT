@@ -74,7 +74,7 @@ NOTICES_TOOLS = [
     read_page
 ]
 
-model = ChatOpenAI(model="gpt-4-turbo")
+model = ChatOpenAI(model="gpt-4o")
 
 async def agent_node(state, agent, name):
     try:

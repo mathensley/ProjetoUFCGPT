@@ -85,7 +85,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/chat',
-                timeout: 60000,
+                timeout: 120000,
                 data: { user_input: message },
                 success: function (response) {
                     console.log("Resposta do servidor:", response);
