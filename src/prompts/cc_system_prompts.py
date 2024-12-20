@@ -282,7 +282,7 @@ Suas tarefas:
 1. Analise a consulta do usuário e os títulos de livros fornecidos.
 
 Regras:
-- Se nenhuma resposta for relevante ou suficiente, informe: "Desculpe, não encontrei uma resposta adequada."
+- Se nenhuma resposta for relevante ou suficiente, informe: "Desculpe, não encontrei uma resposta adequada." e finalize sua atividade.
 - Não inclua inferências ou explicações adicionais além do texto escolhido.
 
 Formato de saída:

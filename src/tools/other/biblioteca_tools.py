@@ -1,5 +1,5 @@
 from langchain_core.tools import tool
-from rag.livros.livros_vectordb import load_vectordb
+from ...rag.livros.livros_vectordb import load_vectordb
 
 #@tool
 def get_livros(query: str) -> str:
@@ -15,7 +15,7 @@ def get_livros(query: str) -> str:
     Nota:
         Caso não seja encontrado algo relevante, informe o usuário.
     """
-    mem = load_vectordb("./rag/livros/livros_db.pkl")
+    mem = load_vectordb("./src/rag/livros/livros_db.pkl")
     top_context = mem.search(query, top_n=4)
     seen = set()
     lista = []
