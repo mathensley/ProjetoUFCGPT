@@ -24,6 +24,7 @@ Este agente será responsável por responder a perguntas sobre a UFCG, mais espe
 - Regulamento
 - Guia de Matrículas
 - Biblioteca
+- Prédios 
 
 O agente deverá ser capaz de fornecer informações precisas e atualizadas sobre esses temas, ajudando alunos e professores no dia a dia.
 
